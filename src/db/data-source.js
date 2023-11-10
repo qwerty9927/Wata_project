@@ -8,7 +8,7 @@ const AppDataSource = new typeorm.DataSource({
   username: config.db.user,
   password: config.db.password,
   database: config.db.name,
-  entities: ["src/entity/*.js"]
+  entities: ["src/entities/*.js"]
 })
 
 module.exports = AppDataSource

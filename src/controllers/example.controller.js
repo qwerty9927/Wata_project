@@ -13,6 +13,11 @@ class ExampleControler {
       metadata: ExampleService.getExample2()
     }).send({ res })
   }
+  async test(req, res, next) {
+    new SuccessResponse({
+      metadata: await ExampleService.test()
+    }).send({ res })
+  }
 }
 
 module.exports = new ExampleControler()
