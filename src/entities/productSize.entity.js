@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { productSizeString } = require("../constance/entityName.js")
+const { productSizeString, productPriceString } = require("../constance/entityName.js")
 
 const productSizeEntity = new EntitySchema({
   name: productSizeString,
@@ -11,10 +11,14 @@ const productSizeEntity = new EntitySchema({
     },
     size_name: {
       type: "varchar"
-    },
-    price_percent_up: {
-      type: "double"
     }
+  },
+  relations: {
+    productPrice: {
+      type: 'one-to-many',
+      target: productPriceString,
+      inverseSide: 'productSize',
+    },
   }
 })
 

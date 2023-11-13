@@ -6,9 +6,10 @@ const deliveryString = "delivery"
 const orderString = "order"
 const productSizeString = "product_size"
 const productString = "product"
+const productPriceString = "product_price"
 const orderDetailString = "order_detail"
 module.exports = {
-  userString, 
+  userString,
   roleString,
   storeString,
   reportString,
@@ -16,5 +17,6 @@ module.exports = {
   orderDetailString,
   orderString,
   productSizeString,
-  productString
+  productString,
+  productPriceString
 }
