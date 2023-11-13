@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { productString } = require("../constance/entityName.js")
+const { productString, productPriceString } = require("../constance/entityName.js")
 
 const productEntity = new EntitySchema({
   name: productString,
@@ -18,9 +18,6 @@ const productEntity = new EntitySchema({
     product_image: {
       type: "varchar"
     },
-    product_price_base: {
-      type: "double"
-    },
     product_desc: {
       type: "varchar"
     },
@@ -28,11 +25,15 @@ const productEntity = new EntitySchema({
       type: "enum",
       enum: ['food', 'drink']
     },
-    product_size_id: {
-      type: "int"
-    },
     is_deleted: {
       type: "tinyint"
+    },
+  },
+  relations: {
+    productPrice: {
+      type: 'one-to-many',
+      target: productPriceString,
+      inverseSide: 'product',
     },
   }
 })
