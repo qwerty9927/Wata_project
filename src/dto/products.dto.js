@@ -1,4 +1,5 @@
 const { getInfoData } = require("../utils");
+const config = require("../configs");
 
 const convertProduct = (product) => {
     if (!product) return null;
@@ -7,6 +8,9 @@ const convertProduct = (product) => {
         fileds: ['product_id', 'product_name', 'product_slug', 'product_image', 'product_desc', 'category'],
         object: product
     });
+
+    productInfo.url_image = (productInfo.product_image) ? `${config.cloudinary.uri}/${product.product_image}` : null;
+    delete productInfo.product_image;
 
     const sizes = product?.productPrice.map((price) => ({
         size_name: price?.productSize?.size_name || '',
