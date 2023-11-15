@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 const Connection = require("../db/connect")
 const { userString } = require("../constance/entityName")
+const { messageResponse } = require("../constance")
 const {
   ConflictResponse,
   BadRequest,
@@ -22,7 +23,7 @@ class AuthService {
       { user_email },
     ])
     if (foundUser) {
-      throw new ConflictResponse("User is existed!")
+      throw new ConflictResponse(messageResponse.register.conflictUser)
     }
     // Hash password
     const hashPassword = await bcrypt.hash(user_password, 10)
@@ -47,9 +48,8 @@ class AuthService {
         user_name,
       },
     })
-    console.log(foundUser)
     if (!foundUser) {
-      throw new AuthFailureResponse("User and password are not correct!")
+      throw new AuthFailureResponse(messageResponse.login.authFailure)
     }
 
     // Compare password
@@ -58,7 +58,7 @@ class AuthService {
       foundUser.user_password
     )
     if (!isMatching) {
-      throw new AuthFailureResponse("User and password are not correct!")
+      throw new AuthFailureResponse(messageResponse.login.authFailure)
     }
 
     // Create token
@@ -82,7 +82,7 @@ class AuthService {
       user_email,
     })
     if (!foundUser) {
-      throw new BadRequest("Email is not signed!")
+      throw new BadRequest(messageResponse.resetPassword.email)
     }
 
     // Generate password
