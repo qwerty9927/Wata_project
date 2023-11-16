@@ -12,13 +12,13 @@ const {
 } = require("../common/error.response")
 
 class AuthService {
-  static getUserRepository() {
-    return Connection.getInstance().getRepository(userString)
+  static async getUserRepository() {
+    return (await Connection.getInstance()).getRepository(userString)
   }
 
   static async register(user_name, user_password, user_email, userInfo) {
     // Is exist user
-    const foundUser = await this.getUserRepository().findOneBy([
+    const foundUser = await (await this.getUserRepository()).findOneBy([
       { user_name },
       { user_email },
     ])
@@ -29,7 +29,7 @@ class AuthService {
     const hashPassword = await bcrypt.hash(user_password, 10)
 
     // Write to database
-    this.getUserRepository().insert({
+    await (await this.getUserRepository()).insert({
       user_name,
       user_password: hashPassword,
       user_email,
@@ -40,7 +40,7 @@ class AuthService {
 
   static async login(user_name, user_password) {
     // Is exist user
-    const foundUser = await this.getUserRepository().findOne({
+    const foundUser = await (await this.getUserRepository()).findOne({
       relations: {
         user_role_relation: true,
       },
@@ -78,7 +78,7 @@ class AuthService {
 
   static async resetPassword(user_email) {
     // Find user by email
-    const foundUser = await this.getUserRepository().findOneBy({
+    const foundUser = await (await this.getUserRepository()).findOneBy({
       user_email,
     })
     if (!foundUser) {
@@ -110,7 +110,7 @@ class AuthService {
     // Modify password in database
       // Hash password
     const hashPassword = await bcrypt.hash(password, 10)
-    await this.getUserRepository().update(
+    await (await this.getUserRepository()).update(
       { user_id: foundUser.user_id },
       { user_password: hashPassword }
     )
