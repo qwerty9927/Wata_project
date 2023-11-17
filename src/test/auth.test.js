@@ -121,7 +121,7 @@ describe("Register api testing", () => {
 
 describe("Reset password api testing", () => {
   const dataset = {
-    user_email: "tanvo9927a@gmail.com"
+    user_email: "tanvo9927@gmail.com"
   }
   test("[Reset password] Test case 1: Empty any field", async () => {
     const response = await request(app).post("/api/v1/auth/forgot-password")
