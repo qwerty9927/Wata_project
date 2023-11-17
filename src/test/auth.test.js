@@ -10,7 +10,7 @@ describe("Login api testing", () => {
   }
   test("[Login] Test case 1: Empty any field", async () => {
     const response = await request(app).post("/api/v1/auth/login")
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body.errors).toBeDefined()
   })
 
@@ -81,7 +81,7 @@ describe("Register api testing", () => {
   }
   test("[Register] Test case 1: Empty any field", async () => {
     const response = await request(app).post("/api/v1/auth/register")
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body.errors).toBeDefined()
   })
 
@@ -125,7 +125,7 @@ describe("Reset password api testing", () => {
   }
   test("[Reset password] Test case 1: Empty any field", async () => {
     const response = await request(app).post("/api/v1/auth/forgot-password")
-    expect(response.statusCode).toBe(400)
+    expect(response.statusCode).toBe(422)
     expect(response.body.errors).toBeDefined()
   })
 

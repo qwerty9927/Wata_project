@@ -23,7 +23,7 @@ class AuthService {
       { user_email },
     ])
     if (foundUser) {
-      throw new ConflictResponse(messageResponse.register.conflictUser)
+      throw new ConflictResponse(messageResponse.conflictUser)
     }
     // Hash password
     const hashPassword = await bcrypt.hash(user_password, 10)
@@ -33,7 +33,9 @@ class AuthService {
       user_name,
       user_password: hashPassword,
       user_email,
-      ...userInfo,
+      user_address: userInfo.user_address,
+      user_phone: userInfo.user_phone,
+      full_name: userInfo.full_name
     })
     return userInfo
   }
@@ -49,7 +51,7 @@ class AuthService {
       },
     })
     if (!foundUser) {
-      throw new AuthFailureResponse(messageResponse.login.authFailure)
+      throw new AuthFailureResponse(messageResponse.authFailure)
     }
 
     // Compare password
@@ -58,7 +60,7 @@ class AuthService {
       foundUser.user_password
     )
     if (!isMatching) {
-      throw new AuthFailureResponse(messageResponse.login.authFailure)
+      throw new AuthFailureResponse(messageResponse.authFailure)
     }
 
     // Create token
@@ -82,7 +84,7 @@ class AuthService {
       user_email,
     })
     if (!foundUser) {
-      throw new BadRequest(messageResponse.resetPassword.email)
+      throw new BadRequest(messageResponse.emailNotSigned)
     }
 
     // Generate password

@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator")
 
-const { BadRequest } = require("../common/error.response")
+const { UnprocessableContentResponse } = require("../common/error.response")
 const {
   CreatedResponse,
   SuccessResponse,
@@ -22,7 +22,7 @@ class AuthController {
         ),
       }).send({ res })
     } else {
-      throw new BadRequest(getErrorMessage(resultValidate))
+      throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
   }
 
@@ -41,7 +41,7 @@ class AuthController {
         cookies: { token },
       })
     } else {
-      throw new BadRequest(getErrorMessage(resultValidate))
+      throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
   }
 
@@ -60,7 +60,7 @@ class AuthController {
         message: "Reset password sucess"
       }).send({res})
     } else {
-      throw new BadRequest(getErrorMessage(resultValidate))
+      throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
   }
 }
