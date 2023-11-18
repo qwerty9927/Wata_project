@@ -1,10 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const exampleRouter = require("../routes/example.route");
-
-// Example route
-router.use(exampleRouter);
+// Products route
 router.use('/products', require("../routes/product.route"));
 
 module.exports = router 

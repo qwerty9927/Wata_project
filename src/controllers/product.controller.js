@@ -1,4 +1,4 @@
-const { BadRequest } = require("../common/error.response");
+const { BadRequest, UnprocessableContentResponse } = require("../common/error.response");
 const { SuccessResponse } = require("../common/success.response");
 const productService = require("../services/product.service");
 const cloudinaryHelper = require("../helpers/cloudinary");
@@ -37,7 +37,7 @@ class ProductController {
       if (req.file?.filename) await cloudinaryHelper.removeFileOnCloud(req.file.filename);
       // Convert validation errors to an array of error messages
       const errorMessages = errors.array().map((error) => error.msg);
-      throw new BadRequest(errorMessages.join('; '));
+      throw new UnprocessableContentResponse(errorMessages);
     }
 
     const payload = req.body;
@@ -57,7 +57,7 @@ class ProductController {
       if (req.file?.filename) await cloudinaryHelper.removeFileOnCloud(req.file.filename);
       // Convert validation errors to an array of error messages
       const errorMessages = errors.array().map((error) => error.msg);
-      throw new BadRequest(errorMessages.join('; '));
+      throw new UnprocessableContentResponse(errorMessages);
     }
 
     const payload = req.body;
@@ -77,7 +77,7 @@ class ProductController {
     if (!errors.isEmpty()) {
       // Convert validation errors to an array of error messages
       const errorMessages = errors.array().map((error) => error.msg);
-      throw new BadRequest(errorMessages.join('; '));
+      throw new UnprocessableContentResponse(errorMessages);
     }
 
     const productId = req.params.productId;

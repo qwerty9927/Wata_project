@@ -34,6 +34,9 @@ class ProductService {
 
   async findOneProduct(productId, relations = []) {
     const product = await this.productRepo.findOne({ relations, where: { is_deleted: false, product_id: productId } });
+    if (!product) {
+      throw new ErrorResponse("Product not found", 404);
+    }
     return convertProduct(product);
   }
 
