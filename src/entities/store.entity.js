@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { storeString, userString, reportString } = require("../constance/entityName.js")
+const { storeString, userString, reportString } = require("../constante/entityName.js")
 
 const storeEntity = new EntitySchema({
   name: storeString,
@@ -15,7 +15,7 @@ const storeEntity = new EntitySchema({
     store_address: {
       type: "varchar"
     }
-  },  
+  },
   relations: {
     store_user_relation: {
       target: userString,

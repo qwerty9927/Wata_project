@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const asyncHandler = require("../middleware/async");
+const asyncHandler = require("../middlewares/async");
 const productControler = require("../controllers/product.controller");
 const { productValidate, productPriceValidate } = require("../validates/index");
 const cloudinaryHelper = require("../helpers/cloudinary");

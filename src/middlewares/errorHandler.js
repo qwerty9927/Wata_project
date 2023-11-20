@@ -1,7 +1,7 @@
 const { ErrorResponse } = require("../common/error.response")
 const chalk = require("chalk")
 const env = process.env.NODE_ENV
-const logger = require("./logger")
+const logger = require("../helpers/logger")
 
 module.exports = (error, req, res, next) => {
 

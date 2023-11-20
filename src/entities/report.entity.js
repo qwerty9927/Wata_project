@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { reportString, storeString } = require("../constance/entityName.js")
+const { reportString, storeString } = require("../constante/entityName.js")
 
 const reportEntity = new EntitySchema({
   name: reportString,

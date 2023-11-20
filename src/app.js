@@ -9,7 +9,7 @@ const path = require("path")
 const cookieParse = require("cookie-parser")
 
 const logger = require("./helpers/logger")
-const errorHandler = require("./helpers/errorHandler")
+const errorHandler = require("./middlewares/errorHandler")
 const Connection = require("./db/connect")
 
 app.use(cors())

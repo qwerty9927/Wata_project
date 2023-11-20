@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 const Connection = require("../db/connect")
-const { userString } = require("../constance/entityName")
-const { messageResponse } = require("../constance")
+const { userString } = require("../constante/entityName")
+const { messageResponse } = require("../constante")
 const {
   ConflictResponse,
   BadRequest,
@@ -12,11 +12,11 @@ const {
 } = require("../common/error.response")
 
 class AuthService {
-  static async getUserRepository() {
+  async getUserRepository() {
     return (await Connection.getInstance()).getRepository(userString)
   }
 
-  static async register(user_name, user_password, user_email, userInfo) {
+  async register(user_name, user_password, user_email, userInfo) {
     // Is exist user
     const foundUser = await (await this.getUserRepository()).findOneBy([
       { user_name },
@@ -40,7 +40,7 @@ class AuthService {
     return userInfo
   }
 
-  static async login(user_name, user_password) {
+  async login(user_name, user_password) {
     // Is exist user
     const foundUser = await (await this.getUserRepository()).findOne({
       relations: {
@@ -74,11 +74,11 @@ class AuthService {
     return token
   }
 
-  static logout() {
+  logout() {
     return null
   }
 
-  static async resetPassword(user_email) {
+  async resetPassword(user_email) {
     // Find user by email
     const foundUser = await (await this.getUserRepository()).findOneBy({
       user_email,
@@ -110,7 +110,7 @@ class AuthService {
 
     // Send mail success
     // Modify password in database
-      // Hash password
+    // Hash password
     const hashPassword = await bcrypt.hash(password, 10)
     await (await this.getUserRepository()).update(
       { user_id: foundUser.user_id },
@@ -119,4 +119,4 @@ class AuthService {
   }
 }
 
-module.exports = AuthService
+module.exports = new AuthService()
