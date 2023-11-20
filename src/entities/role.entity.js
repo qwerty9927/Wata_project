@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { roleString } = require("../constance/entityName.js")
+const { roleString, userString } = require("../constance/entityName.js")
 
 const roleEntity = new EntitySchema({
   name: roleString,
@@ -11,6 +11,13 @@ const roleEntity = new EntitySchema({
     },
     role_name: {
       type: "varchar"
+    }
+  },
+  relations: {
+    role_user_relation: {
+      target: userString,
+      type: "one-to-many",
+      inverseSide: "user_role_relation"
     }
   }
 })
