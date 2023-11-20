@@ -1,6 +1,6 @@
 // product-price.entity.js
 const { EntitySchema } = require('typeorm');
-const { productString, productSizeString, productPriceString } = require("../constante/entityName.js")
+const { productString, productSizeString, productPriceString } = require("../constants/entityName.js")
 
 module.exports = new EntitySchema({
     name: productPriceString,

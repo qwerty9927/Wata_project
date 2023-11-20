@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 const Connection = require("../db/connect")
-const { userString } = require("../constante/entityName")
-const { messageResponse } = require("../constante")
+const { userString } = require("../constants/entityName")
+const { messageResponse } = require("../constants")
 const {
   ConflictResponse,
   BadRequest,

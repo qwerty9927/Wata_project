@@ -1,5 +1,5 @@
 const { check } = require("express-validator");
-const { productConstante } = require("../constante");
+const { productConstante } = require("../constants");
 const util = require("util");
 
 const options = {

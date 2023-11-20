@@ -1,5 +1,5 @@
 const { ErrorResponse } = require("../common/error.response");
-const { productString, productPriceString, productSizeString } = require("../constante/entityName");
+const { productString, productPriceString, productSizeString } = require("../constants/entityName");
 const { convertProducts, convertProduct } = require("../dto/products.dto");
 const cloudinaryHelper = require("../helpers/cloudinary");
 const AppDataSource = require("../db/data-source");
