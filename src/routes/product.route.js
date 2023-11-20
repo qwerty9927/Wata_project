@@ -13,7 +13,7 @@ router.get('/', asyncHandler(productControler.getAllProduct));
 router.get('/:id', asyncHandler(productControler.getProductById));
 
 // Create new product
-router.post('/', cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.postProduct));
+router.post('/', cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.postCreateProduct));
 
 // Update value for product
 router.put('/:id', cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.putUpdateProduct));
