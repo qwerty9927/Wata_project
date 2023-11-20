@@ -2,10 +2,8 @@ const express = require("express")
 const authRouter = require("./auth.route")
 const router = express.Router()
 
-const exampleRouter = require("../routes/example.route")
-
-// Example route
-router.use(exampleRouter)
+// Products route
+router.use('/products', require("../routes/product.route"));
 
 // Auth route
 router.use("/auth", authRouter)
