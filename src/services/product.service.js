@@ -12,20 +12,11 @@ class ProductService {
     this.productSizeRepo = AppDataSource.getRepository(productSizeString);
   }
 
-  async findAllProduct(page = 1, limit = 10, relations = []) {
+  async findAllProduct(page = 1, limit = 10, category = null, relations = []) {
+    const maxLimit = 200;
     // Pagination
     page = parseInt(page) || 1;
-    limit = parseInt(limit) || 0;
-    const skip = (page - 1) * limit;
-
-    const products = await this.productRepo.find({ relations, where: { is_deleted: false }, skip, take: limit });
-    return convertProducts(products);
-  }
-
-  async findProductsByCategory(category = "", page = 1, limit = 10, relations = []) {
-    // Pagination
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 0;
+    limit = parseInt(limit) < maxLimit && parseInt(limit) ? parseInt(limit) : maxLimit;
     const skip = (page - 1) * limit;
 
     const products = await this.productRepo.find({ relations, where: { is_deleted: false, category }, skip, take: limit });
