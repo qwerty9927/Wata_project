@@ -107,6 +107,12 @@ class ProductService {
     product.is_deleted = true;
     await this.productRepo.save(product);
   }
+
+  async getPriceProduct(productId, productSize) {
+    const product = await this.findOneProduct(productId, ['productPrice', 'productPrice.productSize']);
+    const sizeInfo = product.sizes.find(size => size.size_name === productSize);
+    return sizeInfo ? sizeInfo.product_price : 0;
+  }
 }
 
 module.exports = new ProductService();
