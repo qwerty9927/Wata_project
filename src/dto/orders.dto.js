@@ -13,7 +13,7 @@ const convertCreateOrderReturn = (order) => {
 
 const convertGetOneOrderReturn = (order) => {
     const orderInfo = getInfoData({
-        fileds: ['order_id', 'order_code', 'order_address', 'fee_transport', 'total_price_product',
+        fileds: ['order_id', 'order_code', 'order_status', 'order_address', 'fee_transport', 'total_price_product',
             'order_price', 'order_date', 'store_id', 'recipient_name', 'recipient_phone'],
         object: order
     })
