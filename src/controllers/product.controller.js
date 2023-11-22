@@ -69,7 +69,7 @@ class ProductController {
     }).send({ res });
   }
 
-  async postProductPrice(req, res, next) {
+  async postAddProductPrice(req, res, next) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

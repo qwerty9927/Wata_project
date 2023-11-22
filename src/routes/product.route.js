@@ -6,6 +6,9 @@ const productControler = require("../controllers/product.controller");
 const { productValidate, productPriceValidate } = require("../validates/index");
 const cloudinaryHelper = require("../helpers/cloudinary");
 
+const authentication = require("../middlewares/authentication");
+const checkRole = require("../middlewares/checkRole");
+
 // Get all product
 router.get('/', asyncHandler(productControler.getAllProduct));
 
@@ -13,15 +16,15 @@ router.get('/', asyncHandler(productControler.getAllProduct));
 router.get('/:id', asyncHandler(productControler.getProductById));
 
 // Create new product
-router.post('/', cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.postCreateProduct));
+router.post('/', authentication, checkRole(["Admin", "Staff"]), cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.postCreateProduct));
 
 // Update value for product
-router.put('/:id', cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.putUpdateProduct));
+router.put('/:id', authentication, checkRole(["Admin", "Staff"]), cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.putUpdateProduct));
 
 // Add price for product
-router.post('/:productId/prices', productPriceValidate.validator(), asyncHandler(productControler.postProductPrice));
+router.post('/:productId/prices', authentication, checkRole(["Admin", "Staff"]), productPriceValidate.validator(), asyncHandler(productControler.postAddProductPrice));
 
 // Delete one product
-router.delete('/:id', asyncHandler(productControler.deleteOneProduct));
+router.delete('/:id', authentication, checkRole(["Admin", "Staff"]), asyncHandler(productControler.deleteOneProduct));
 
 module.exports = router
