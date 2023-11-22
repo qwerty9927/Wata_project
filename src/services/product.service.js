@@ -4,6 +4,7 @@ const { convertProducts, convertProduct } = require("../dto/products.dto");
 const cloudinaryHelper = require("../helpers/cloudinary");
 const AppDataSource = require("../db/data-source");
 const slugify = require("slugify");
+const { productConstant } = require("../constants");
 
 class ProductService {
   constructor() {
@@ -13,10 +14,11 @@ class ProductService {
   }
 
   async findAllProduct(page = 1, limit = 10, category = null, relations = []) {
-    const maxLimit = 200;
+    const maxLimit = productConstant.PAGINATION.MAX_LIMIT;
+
     // Pagination
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) < maxLimit && parseInt(limit) ? parseInt(limit) : maxLimit;
+    page = Math.max(1, parseInt(page)) || 1;
+    limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
     const skip = (page - 1) * limit;
 
     const products = await this.productRepo.find({ relations, where: { is_deleted: false, category }, skip, take: limit });

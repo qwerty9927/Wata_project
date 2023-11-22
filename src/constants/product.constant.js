@@ -8,5 +8,8 @@ module.exports = {
     PRODUCT_PRICE_NOTIFY_VALIDATE: {
         PRODUCT_SIZE: 'size: Product size must be %s',
         PRODUCT_PRICE: 'price: Product price must be number'
+    },
+    PAGINATION: {
+        MAX_LIMIT: 20
     }
 }
