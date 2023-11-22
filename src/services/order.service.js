@@ -21,8 +21,11 @@ class OrderService {
         // return orders;
     }
 
-    async getOrderByOrderCode(orderCode) {
-        const order = await this.orderRepo.findOne({ where: { order_code: orderCode }, relations: [relationOrderOderDetail] });
+    async getOrderByOrderCode(userId, orderCode) {
+        const order = await this.orderRepo.findOne({ where: { user_id: userId, order_code: orderCode }, relations: [relationOrderOderDetail] });
+        if (!order) {
+            throw new ErrorResponse("Order not found!", 404);
+        }
         return convertGetOneOrderReturn(order);
     }
 
@@ -46,7 +49,7 @@ class OrderService {
             total_price_product: totalPriceProduct,
             order_price: orderPrice,
             order_date: new Date(),
-            user_id: userId || 1,
+            user_id: userId,
             store_id: storeId,
             recipient_name: recipientName,
             recipient_phone: recipientPhone
