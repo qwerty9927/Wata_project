@@ -4,6 +4,7 @@ const { convertCreateOrderReturn, convertGetOrdersReturn, convertGetOneOrderRetu
 const { orderConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
 const productService = require("./product.service");
+const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
 
@@ -36,14 +37,13 @@ class OrderService {
             throw new ConflictResponse(orderConstant.ORDER_CONFLICT_MSG);
         }
 
-        if (setAddressDefault) {
-            // Update address for user
+        if (setAddressDefault || setPhoneDefault) {
+            // Update address and phone for user
+            await userService.modifyProfile(userId, {
+                user_address: setAddressDefault ? orderAddress : undefined,
+                user_phone: setPhoneDefault ? recipientPhone : undefined
+            });
         }
-
-        if (setPhoneDefault) {
-            // Update phone for user
-        }
-
 
         // calculate totalPrice in productDetail
         const totalPriceProduct = await this.calculateTotalPriceProduct(orderDetails)

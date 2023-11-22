@@ -6,6 +6,8 @@ module.exports = {
         RECIPIENT_NAME: 'recipientName: Recipient name must not be empty',
         RECIPIENT_PHONE: 'recipientPhone: Recipient phone must not be empty and must be a valid mobile phone number',
         FEE_TRANSPORT: 'feeTransport: Fee transport must not be empty and must be a float value',
+        SET_ADDRESS_DEFAULT: 'setAddressDefault: must be a boolean value',
+        SET_PHONE_DEFAULT: 'setPhoneDefault: must be a boolean value',
         ORDER_DETAIL: {
             MAIN: "orderDetails: Order detail must be one array",
             PRODUCT_ID: 'productId: Product ID in order detail must not be empty and must be a integer value',
