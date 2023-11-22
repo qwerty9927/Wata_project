@@ -16,7 +16,10 @@ const config = {
     key: process.env.CLOUDINARY_KEY,
     secret: process.env.CLOUDINARY_SECRET,
     uri: process.env.CLOUDINARY_LINK,
-  }
+  },
+  tokenExpiresIn: process.env.TOKEN_EXPIRESIN,
+  emailName: process.env.EMAIL_NAME,
+  emailPassword: process.env.EMAIL_PASSWORD
 }
 
 module.exports = config

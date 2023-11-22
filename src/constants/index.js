@@ -1,7 +1,9 @@
-const { messageResponse } = require("./auth.constant")
+const { authMessageResponse } = require("./auth.constant")
 const productConstante = require("./product.constant")
+const { userMessageResponse } = require("./user.constant")
 
 module.exports = {
-  messageResponse,
-  productConstante
+  authMessageResponse,
+  productConstante,
+  userMessageResponse
 }
