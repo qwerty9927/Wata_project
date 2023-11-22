@@ -7,6 +7,7 @@ const {
 } = require("../common/success.response")
 const AuthService = require("../services/auth.service")
 const getErrorMessage = require("../utils/getErrorMessage")
+const { getInfoData } = require("../utils")
 
 class AuthController {
   async register(req, res, next) {
@@ -14,7 +15,8 @@ class AuthController {
     if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    const { user_name, user_password, user_email, role_id, ...userInfo } = req.body
+    const profile = getInfoData({fileds: ["user_name", "user_password", "full_name", "user_phone", "user_email", "user_address", "user_phone"], object: req.body})
+    const { user_name, user_password, user_email, ...userInfo } = profile
     new CreatedResponse({
       metadata: await AuthService.register(
         user_name,

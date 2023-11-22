@@ -34,9 +34,7 @@ class AuthService {
       user_name,
       user_password: hashedPassword,
       user_email,
-      user_address: userInfo.user_address,
-      user_phone: userInfo.user_phone,
-      full_name: userInfo.full_name
+      ...userInfo
     })
     return userInfo
   }
