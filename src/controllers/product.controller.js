@@ -12,9 +12,7 @@ class ProductController {
   async getAllProduct(req, res, next) {
     const { category, page, limit } = req.query;
     const relations = [relationProductPrice, relationProductSize];
-    const products = !category
-      ? await productService.findAllProduct(page, limit, relations)
-      : await productService.findProductsByCategory(category, page, limit, relations);
+    const products = await productService.findAllProduct(page, limit, category, relations)
 
     new SuccessResponse({
       metadata: products,
@@ -30,7 +28,7 @@ class ProductController {
     }).send({ res });
   }
 
-  async postProduct(req, res, next) {
+  async postCreateProduct(req, res, next) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -71,7 +69,7 @@ class ProductController {
     }).send({ res });
   }
 
-  async postProductPrice(req, res, next) {
+  async postAddProductPrice(req, res, next) {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
