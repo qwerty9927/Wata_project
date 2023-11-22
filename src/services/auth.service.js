@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken")
 const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 const Connection = require("../db/connect")
+const config = require("../configs")
 const { userString } = require("../constants/entityName")
-const { messageResponse } = require("../constants")
+const { authMessageResponse } = require("../constants")
 const {
   ConflictResponse,
   BadRequest,
@@ -23,19 +24,17 @@ class AuthService {
       { user_email },
     ])
     if (foundUser) {
-      throw new ConflictResponse(messageResponse.conflictUser)
+      throw new ConflictResponse(authMessageResponse.conflictUser)
     }
     // Hash password
-    const hashPassword = await bcrypt.hash(user_password, 10)
+    const hashedPassword = await bcrypt.hash(user_password, 10)
 
     // Write to database
     await (await this.getUserRepository()).insert({
       user_name,
-      user_password: hashPassword,
+      user_password: hashedPassword,
       user_email,
-      user_address: userInfo.user_address,
-      user_phone: userInfo.user_phone,
-      full_name: userInfo.full_name
+      ...userInfo
     })
     return userInfo
   }
@@ -51,7 +50,7 @@ class AuthService {
       },
     })
     if (!foundUser) {
-      throw new AuthFailureResponse(messageResponse.authFailure)
+      throw new AuthFailureResponse(authMessageResponse.authFailure)
     }
 
     // Compare password
@@ -60,16 +59,17 @@ class AuthService {
       foundUser.user_password
     )
     if (!isMatching) {
-      throw new AuthFailureResponse(messageResponse.authFailure)
+      throw new AuthFailureResponse(authMessageResponse.authFailure)
     }
 
     // Create token
     const payload = {
       user_id: foundUser.user_id,
+      user_email: foundUser.user_email,
       role_name: foundUser.user_role_relation.role_name,
     }
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: "60s",
+      expiresIn: config.tokenExpiresIn,
     })
     return token
   }
@@ -84,7 +84,7 @@ class AuthService {
       user_email,
     })
     if (!foundUser) {
-      throw new BadRequest(messageResponse.emailNotSigned)
+      throw new BadRequest(authMessageResponse.emailNotSigned)
     }
 
     // Generate password
@@ -94,13 +94,13 @@ class AuthService {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.EMAIL_NAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: config.emailName,
+        pass: config.emailPassword,
       },
     })
 
     const mailOptions = {
-      from: process.env.EMAIL_NAME,
+      from: config.emailName,
       to: user_email,
       subject: "[Pizza store] Reset password",
       text: `Your new password: ${password}`,
