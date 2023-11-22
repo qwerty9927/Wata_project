@@ -12,20 +12,11 @@ class ProductService {
     this.productSizeRepo = AppDataSource.getRepository(productSizeString);
   }
 
-  async findAllProduct(page = 1, limit = 10, relations = []) {
+  async findAllProduct(page = 1, limit = 10, category = null, relations = []) {
+    const maxLimit = 200;
     // Pagination
     page = parseInt(page) || 1;
-    limit = parseInt(limit) || 0;
-    const skip = (page - 1) * limit;
-
-    const products = await this.productRepo.find({ relations, where: { is_deleted: false }, skip, take: limit });
-    return convertProducts(products);
-  }
-
-  async findProductsByCategory(category = "", page = 1, limit = 10, relations = []) {
-    // Pagination
-    page = parseInt(page) || 1;
-    limit = parseInt(limit) || 0;
+    limit = parseInt(limit) < maxLimit && parseInt(limit) ? parseInt(limit) : maxLimit;
     const skip = (page - 1) * limit;
 
     const products = await this.productRepo.find({ relations, where: { is_deleted: false, category }, skip, take: limit });
@@ -115,6 +106,15 @@ class ProductService {
 
     product.is_deleted = true;
     await this.productRepo.save(product);
+  }
+
+  async getPriceProduct(productId, productSize) {
+    const product = await this.findOneProduct(productId, ['productPrice', 'productPrice.productSize']);
+    const sizeInfo = product.sizes.find(size => size.size_name === productSize);
+    if (!sizeInfo) {
+      throw new ErrorResponse(`Size ${productSize} not found in ${product.product_name} product`, 404);
+    }
+    return sizeInfo.product_price;
   }
 }
 

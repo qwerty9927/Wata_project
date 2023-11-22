@@ -1,5 +1,5 @@
 const { check } = require("express-validator");
-const { productConstante } = require("../constants");
+const { productConstant } = require("../constants");
 const util = require("util");
 
 const options = {
@@ -11,9 +11,9 @@ const options = {
 module.exports = {
     validator: () => {
         const msgErr = {
-            productName: util.format(productConstante.PRODUCT_NOTIFY_VALIDATE.PRODUCT_NAME, options.name.min, options.name.max),
-            productDesc: util.format(productConstante.PRODUCT_NOTIFY_VALIDATE.PRODUCT_DESC, options.desc.min, options.desc.max),
-            productCategory: util.format(productConstante.PRODUCT_NOTIFY_VALIDATE.PRODUCT_CATEGORY, options.category.join('/'))
+            productName: util.format(productConstant.PRODUCT_NOTIFY_VALIDATE.PRODUCT_NAME, options.name.min, options.name.max),
+            productDesc: util.format(productConstant.PRODUCT_NOTIFY_VALIDATE.PRODUCT_DESC, options.desc.min, options.desc.max),
+            productCategory: util.format(productConstant.PRODUCT_NOTIFY_VALIDATE.PRODUCT_CATEGORY, options.category.join('/'))
         }
 
         return [

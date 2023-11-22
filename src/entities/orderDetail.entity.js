@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { orderDetailString } = require("../constants/entityName.js")
+const { orderDetailString, productString, orderString } = require("../constants/entityName.js")
 
 const orderDetailEntity = new EntitySchema({
   name: orderDetailString,
@@ -17,7 +17,30 @@ const orderDetailEntity = new EntitySchema({
     },
     product_id: {
       type: "int"
+    },
+    product_size: {
+      type: "varchar"
     }
+  },
+  relations: {
+    orderDetail_order_relation: {
+      target: orderString,
+      type: "many-to-one",
+      joinColumn: {
+        name: "order_id",
+        referencedColumnName: 'order_id',
+      },
+      inverseSide: "order_orderDetail_relation"
+    },
+    orderDetail_product_relation: {
+      target: productString,
+      type: "many-to-one",
+      joinColumn: {
+        name: "product_id",
+        referencedColumnName: 'product_id',
+      },
+      inverseSide: "product_orderDetail_relation"
+    },
   }
 })
 
