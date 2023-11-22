@@ -29,12 +29,21 @@ class OrderService {
         return convertGetOneOrderReturn(order);
     }
 
-    async createOrder({ orderCode, orderStatus, orderAddress, storeId, recipientName, recipientPhone, feeTransport, orderDetails, userId }) {
+    async createOrder({ orderCode, orderStatus, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
         // check existing Order
         const existingOrder = await this.orderRepo.findOne({ where: { order_code: orderCode } });
         if (existingOrder) {
             throw new ConflictResponse(orderConstant.ORDER_CONFLICT_MSG);
         }
+
+        if (setAddressDefault) {
+            // Update address for user
+        }
+
+        if (setPhoneDefault) {
+            // Update phone for user
+        }
+
 
         // calculate totalPrice in productDetail
         const totalPriceProduct = await this.calculateTotalPriceProduct(orderDetails)

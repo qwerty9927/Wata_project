@@ -6,9 +6,9 @@ const { validationResult } = require("express-validator");
 
 class OrderController {
     async getOrderByUserId(req, res, next) {
-        const userId = req.user_id || 1;
+        const userId = req.user_id;
         const orderCode = req.query.orderCode;
-        const result = !orderCode ? await orderService.getAllOrderByUserId(userId) : await orderService.getOrderByOrderCode(orderCode);
+        const result = !orderCode ? await orderService.getAllOrderByUserId(userId) : await orderService.getOrderByOrderCode(userId, orderCode);
 
         new SuccessResponse({
             metadata: result,
@@ -25,13 +25,13 @@ class OrderController {
             throw new UnprocessableContentResponse(errorMessages);
         }
 
-        const { orderCode, orderStatus, orderAddress, storeId,
-            recipientName, recipientPhone, feeTransport, orderDetails } = req.body;
+        const { orderCode, orderStatus, orderAddress, setAddressDefault, storeId,
+            recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails } = req.body;
 
         const payload = {
-            orderCode, orderStatus, orderAddress, storeId,
-            recipientName, recipientPhone, feeTransport, orderDetails,
-            userId: req.user_id || 1
+            orderCode, orderStatus, orderAddress, setAddressDefault, storeId,
+            recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails,
+            userId: req.user_id
         }
 
         const result = await orderService.createOrder(payload);

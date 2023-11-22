@@ -111,7 +111,10 @@ class ProductService {
   async getPriceProduct(productId, productSize) {
     const product = await this.findOneProduct(productId, ['productPrice', 'productPrice.productSize']);
     const sizeInfo = product.sizes.find(size => size.size_name === productSize);
-    return sizeInfo ? sizeInfo.product_price : 0;
+    if (!sizeInfo) {
+      throw new ErrorResponse(`Size ${productSize} not found in ${product.product_name} product`, 404);
+    }
+    return sizeInfo.product_price;
   }
 }
 
