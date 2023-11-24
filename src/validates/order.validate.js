@@ -17,7 +17,9 @@ const msgErr = {
     orderDetails: orderConstant.ORDER_NOTIFY_VALIDATE.ORDER_DETAIL.MAIN,
     orderDetail_productId: orderConstant.ORDER_NOTIFY_VALIDATE.ORDER_DETAIL.PRODUCT_ID,
     orderDetail_productSize: util.format(orderConstant.ORDER_NOTIFY_VALIDATE.ORDER_DETAIL.PRODUCT_SIZE, options.productSize.join('/')),
-    orderDetail_quantityBuy: orderConstant.ORDER_NOTIFY_VALIDATE.ORDER_DETAIL.QUANTITY_BUY
+    orderDetail_quantityBuy: orderConstant.ORDER_NOTIFY_VALIDATE.ORDER_DETAIL.QUANTITY_BUY,
+    setAddressDefault: orderConstant.ORDER_NOTIFY_VALIDATE.SET_ADDRESS_DEFAULT,
+    setPhoneDefault: orderConstant.ORDER_NOTIFY_VALIDATE.SET_PHONE_DEFAULT
 };
 
 module.exports = {
@@ -30,6 +32,8 @@ module.exports = {
             check('recipientName').isString().withMessage(msgErr.recipientName),
             check('recipientPhone').isMobilePhone().withMessage(msgErr.recipientPhone),
             check('feeTransport').isFloat().withMessage(msgErr.feeTransport),
+            check('setAddressDefault').isBoolean().withMessage(msgErr.setAddressDefault),
+            check('setPhoneDefault').isBoolean().withMessage(msgErr.setPhoneDefault),
             check('orderDetails').isArray().withMessage(msgErr.orderDetails),
             check('orderDetail.*.productId').isInt().withMessage(msgErr.orderDetail_productId),
             check('orderDetail.*.productSize').isIn(options.productSize).withMessage(msgErr.orderDetail_productSize),
