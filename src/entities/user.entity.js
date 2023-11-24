@@ -27,6 +27,9 @@ const userEntity = new EntitySchema({
     user_email: {
       type: "varchar"
     },
+    token: {
+      type: "varchar"
+    },
     role_id: {
       type: "int"
     },
