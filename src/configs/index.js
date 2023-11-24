@@ -19,7 +19,8 @@ const config = {
   },
   tokenExpiresIn: process.env.TOKEN_EXPIRESIN,
   emailName: process.env.EMAIL_NAME,
-  emailPassword: process.env.EMAIL_PASSWORD
+  emailPassword: process.env.EMAIL_PASSWORD,
+  jwtSecret: process.env.JWT_SECRET
 }
 
 module.exports = config

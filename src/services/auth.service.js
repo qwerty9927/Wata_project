@@ -65,17 +65,34 @@ class AuthService {
     // Create token
     const payload = {
       user_id: foundUser.user_id,
-      user_email: foundUser.user_email,
       role_name: foundUser.user_role_relation.role_name,
     }
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, config.jwtSecret, {
       expiresIn: config.tokenExpiresIn,
     })
+
+    // Write token
+    await (await this.getUserRepository()).update(
+      {user_name},
+      {token}
+    )
     return token
   }
 
-  logout() {
-    return null
+  async logout(user_id) {
+    // Find user by id
+    const foundUser = await (await this.getUserRepository()).findOneBy({
+      user_id
+    })
+    if(!foundUser){
+      throw new AuthFailureResponse(authMessageResponse.authFailure)
+    }
+
+    // Delete token
+    await (await this.getUserRepository()).update(
+      {user_id},
+      {token: null}
+    )
   }
 
   async resetPassword(user_email) {

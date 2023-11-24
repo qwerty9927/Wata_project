@@ -39,17 +39,15 @@ class AuthController {
     )
     new SuccessResponse({
       message: "Login success",
-    }).send({
-      res,
-      cookies: { token },
-    })
+      metadata: {token}
+    }).send({ res })
   }
 
-  logout(req, res, next) {
-    const token = AuthService.logout()
+  async logout(req, res, next) {
+    await AuthService.logout(req.user_id)
     new SuccessResponse({
       message: "Logout success",
-    }).send({ res, cookies: { token } })
+    }).send({ res })
   }
 
   async resetPassword(req, res, next) {
