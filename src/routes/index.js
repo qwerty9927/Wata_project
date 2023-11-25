@@ -1,10 +1,16 @@
-const express = require("express")
+const express = require("express");
 const router = express.Router()
 
-const asyncHandler = require("../middleware/async");
-const ExampleController = require("../controllers/example.controller")
+// Products route
+router.use('/products', require("./product.route"));
 
-router.get('/', asyncHandler(ExampleController.getExample))
-router.get('/example2', asyncHandler(ExampleController.getExample2))
+// Auth route
+router.use("/auth", require("./auth.route"));
+
+// Orders route
+router.use('/orders', require("./order.route"));
+
+// User route
+router.use("/users", require("./user.route"))
 
 module.exports = router 

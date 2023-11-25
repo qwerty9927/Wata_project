@@ -24,8 +24,13 @@ const getIdFromSlugIdProduct = (slugId_product) => {
     return pID.substring(0, 1) === "p" ? pID.substring(1) : null;
 }
 
+const isObjectEmpty = (object = {}) => {
+    return _.isEmpty(object)
+}
+
 module.exports = {
     getInfoData,
     makeid,
-    getIdFromSlugIdProduct
+    getIdFromSlugIdProduct,
+    isObjectEmpty
 }

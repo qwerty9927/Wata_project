@@ -2,20 +2,21 @@ const AppDataSource = require("./data-source.js")
 const logger = require("../helpers/logger.js")
 
 class Connection {
-  static connect() {
-    AppDataSource.initialize().then(() => {
-      console.log("Data source has been initialized. Connected successfully!")
+  static async connect() {
+    try {
+      await AppDataSource.initialize();
+      // console.log("Data source has been initialized. Connected successfully!")
       logger.info('Database connected');
-    }).catch((err) => {
-      console.log("Error during initializing source. Connection failed!", err)
-      logger.error(`Error connecting to database: ${err}`);
-    })
+    } catch (error) {
+      // console.log("Error during initializing source. Connection failed!", error)
+      logger.error(`Error connecting to database: ${error}`);
+    }
   }
-  static getInstance() {
+  static async getInstance() {
     if (AppDataSource.isInitialized) {
       return AppDataSource
     } else {
-      this.connect()
+      await this.connect()
       return AppDataSource
     }
   }

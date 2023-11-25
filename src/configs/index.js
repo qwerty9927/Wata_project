@@ -10,7 +10,17 @@ const config = {
   server: {
     host: process.env.API_HOST,
     port: process.env.EXPRESS_PORT,
-  }
+  },
+  cloudinary: {
+    name: process.env.CLOUDINARY_NAME,
+    key: process.env.CLOUDINARY_KEY,
+    secret: process.env.CLOUDINARY_SECRET,
+    uri: process.env.CLOUDINARY_LINK,
+  },
+  tokenExpiresIn: process.env.TOKEN_EXPIRESIN,
+  emailName: process.env.EMAIL_NAME,
+  emailPassword: process.env.EMAIL_PASSWORD,
+  jwtSecret: process.env.JWT_SECRET
 }
 
 module.exports = config
