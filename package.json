@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest",
+    "test": "dotenv -e .env.test.local -- jest",
+    "start": "node server.js",
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev:db-test": "dotenv -e .env.test.local -- nodemon server.js"
   },
   "author": "",
   "license": "ISC",
