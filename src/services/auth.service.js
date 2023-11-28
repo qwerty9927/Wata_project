@@ -19,10 +19,9 @@ class AuthService {
 
   async register(user_name, user_password, user_email, userInfo) {
     // Is exist user
-    const foundUser = await (await this.getUserRepository()).findOneBy([
-      { user_name },
-      { user_email },
-    ])
+    const foundUser = await (
+      await this.getUserRepository()
+    ).findOneBy([{ user_name }, { user_email }])
     if (foundUser) {
       throw new ConflictResponse(authMessageResponse.conflictUser)
     }
@@ -30,18 +29,22 @@ class AuthService {
     const hashedPassword = await bcrypt.hash(user_password, 10)
 
     // Write to database
-    await (await this.getUserRepository()).insert({
+    await (
+      await this.getUserRepository()
+    ).insert({
       user_name,
       user_password: hashedPassword,
       user_email,
-      ...userInfo
+      ...userInfo,
     })
     return userInfo
   }
 
   async login(user_name, user_password) {
     // Is exist user
-    const foundUser = await (await this.getUserRepository()).findOne({
+    const foundUser = await (
+      await this.getUserRepository()
+    ).findOne({
       relations: {
         user_role_relation: true,
       },
@@ -72,32 +75,33 @@ class AuthService {
     })
 
     // Write token
-    await (await this.getUserRepository()).update(
-      {user_name},
-      {token}
-    )
+    const hashedToken = await bcrypt.hash(token, 10)
+    await (
+      await this.getUserRepository()
+    ).update({ user_name }, { token: hashedToken })
     return token
   }
 
   async logout(user_id) {
     // Find user by id
-    const foundUser = await (await this.getUserRepository()).findOneBy({
-      user_id
+    const foundUser = await (
+      await this.getUserRepository()
+    ).findOneBy({
+      user_id,
     })
-    if(!foundUser){
+    if (!foundUser) {
       throw new AuthFailureResponse(authMessageResponse.authFailure)
     }
 
     // Delete token
-    await (await this.getUserRepository()).update(
-      {user_id},
-      {token: null}
-    )
+    await (await this.getUserRepository()).update({ user_id }, { token: null })
   }
 
   async resetPassword(user_email) {
     // Find user by email
-    const foundUser = await (await this.getUserRepository()).findOneBy({
+    const foundUser = await (
+      await this.getUserRepository()
+    ).findOneBy({
       user_email,
     })
     if (!foundUser) {
@@ -129,10 +133,9 @@ class AuthService {
     // Modify password in database
     // Hash password
     const hashPassword = await bcrypt.hash(password, 10)
-    await (await this.getUserRepository()).update(
-      { user_id: foundUser.user_id },
-      { user_password: hashPassword }
-    )
+    await (
+      await this.getUserRepository()
+    ).update({ user_id: foundUser.user_id }, { user_password: hashPassword })
   }
 }
 
