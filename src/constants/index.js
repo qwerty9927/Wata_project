@@ -9,5 +9,7 @@ module.exports = {
   authMessageResponse,
   productConstant,
   orderConstant,
-  userMessageResponse
+  userMessageResponse,
+  storeMessageResponse,
+  reportConstant
 }

@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 class PDFReportService {
-    static generatePDF(report, reportDetails, savePath = "./reports") {
+    static generatePDF(report, listProductInfo, savePath = "./reports") {
         if (!fs.existsSync(savePath)) {
             fs.mkdirSync(savePath, { recursive: true });
         }
@@ -30,9 +30,10 @@ class PDFReportService {
 
         // Add report details array
         doc.fontSize(14).text("Report Details:", { underline: true }).moveDown(0.5);
-        reportDetails.forEach((detail) => {
+        listProductInfo.forEach((detail) => {
             doc.fontSize(12);
             doc.text(`Product ID: ${detail.product_id}`);
+            doc.text(`Product Name: ${detail.product_name}`);
             doc.text(`Product Size: ${detail.product_size}`);
             doc.text(`Quantity Buy: ${detail.quantity_buy}`);
             doc.moveDown(0.5);

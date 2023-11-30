@@ -3,12 +3,13 @@ const { reportString, storeString, reportDetailString } = require("../constants/
 const { convertGetOneReportReturn, convertGetReportsReturn } = require("../dto/reports.dto");
 const { reportConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
-const { report } = require("process");
 
 const orderService = require("./order.service");
 const PDFReportService = require("./pdfReport.service");
 
 const relationReportReportDetail = 'report_reportDetail_relation';
+const relationReportDetailProduct = 'report_reportDetail_relation.reportDetail_product_relation'
+
 
 class ReportService {
     constructor() {
@@ -25,12 +26,12 @@ class ReportService {
         limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
         const skip = (page - 1) * limit;
 
-        const reports = await this.reportRepo.find({ where: { store_id: storeId }, skip, take: limit, relations: [relationReportReportDetail] });
+        const reports = await this.reportRepo.find({ where: { store_id: storeId }, skip, take: limit, relations: [relationReportReportDetail, relationReportDetailProduct] });
         return convertGetReportsReturn(reports);
     }
 
     async findOneReport(reportId) {
-        const foundReport = await this.reportRepo.findOne({ where: { report_id: reportId }, relations: [relationReportReportDetail] });
+        const foundReport = await this.reportRepo.findOne({ where: { report_id: reportId }, relations: [relationReportReportDetail, relationReportDetailProduct] });
         if (!foundReport) {
             throw new ErrorResponse("Report not found!", 404);
         }
@@ -66,7 +67,7 @@ class ReportService {
             store_id: storeId
         })
         const savedReport = await this.reportRepo.save(report);
-        const reportDetails = listProductInfo.map(element => ({
+        const reportDetails = listProductInfo.map(({ product_name, ...element }) => ({
             report_id: savedReport.report_id,
             ...element
         }));
@@ -74,7 +75,7 @@ class ReportService {
         await this.reportDetailRepo.save(reportDetails);
 
         // Generate PDF and get file name
-        const pdfFileName = PDFReportService.generatePDF(savedReport, reportDetails);
+        const pdfFileName = PDFReportService.generatePDF(savedReport, listProductInfo);
 
         return { report: savedReport, pdfFileName };
     }

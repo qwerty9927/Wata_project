@@ -14,6 +14,9 @@ router.get('/', authentication, checkRole(["Admin", "Staff", "Customer"]), async
 // Create new product
 router.post('/', authentication, checkRole(["Admin", "Staff", "Customer"]), orderValidate.validatorForCreate(), asyncHandler(orderControler.postCreateOrder));
 
+// Get all order with role admin and staff
+router.get('/all', authentication, checkRole(["Admin", "Staff"]), asyncHandler(orderControler.getAllOrder));
+
 // Change order status
 router.put('/:id', authentication, checkRole(["Admin", "Staff"]), orderValidate.validatorForChangeStatus(), asyncHandler(orderControler.putChangeOrderStatus));
 
