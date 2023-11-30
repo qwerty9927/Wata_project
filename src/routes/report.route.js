@@ -8,10 +8,10 @@ const { reportValidate } = require("../validates/index");
 const authentication = require("../middlewares/authentication");
 const checkRole = require("../middlewares/checkRole");
 
-router.get('/', asyncHandler(reportControler.getAllReport));
+router.get('/', authentication, checkRole(["Admin"]), asyncHandler(reportControler.getAllReport));
 
-router.get('/:id', asyncHandler(reportControler.getReportById));
+router.get('/:id', authentication, checkRole(["Admin"]), asyncHandler(reportControler.getReportById));
 
-router.post('/', reportValidate.validator(), asyncHandler(reportControler.postCreateReport));
+router.post('/', authentication, checkRole(["Staff", "Admin"]), reportValidate.validator(), asyncHandler(reportControler.postCreateReport));
 
 module.exports = router
