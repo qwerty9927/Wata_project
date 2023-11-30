@@ -26,6 +26,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.6.2",
     "nodemailer": "^6.9.7",
+    "pdfkit": "^0.14.0",
     "slugify": "^1.6.6",
     "typeorm": "^0.3.17",
     "util": "^0.12.5",
