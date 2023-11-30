@@ -8,6 +8,8 @@ const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
 
+const { Between, In } = require("typeorm");
+
 class OrderService {
     constructor() {
         this.orderRepo = AppDataSource.getRepository(orderString);
@@ -100,6 +102,34 @@ class OrderService {
             totalPrice += (priceItem * item.quantityBuy);
         }
         return totalPrice;
+    }
+
+    async calculateTotalRevenueAndTotalOrder(storeId, startDate, endDate) {
+        const paymentOrders = convertGetOrdersReturn(await this.orderRepo.find({
+            where: {
+                store_id: storeId,
+                order_status: In(["payment", "done"]),
+                order_date: Between(startDate, endDate)
+            },
+            relations: [relationOrderOderDetail]
+        }))
+
+        const totalRevenue = paymentOrders.reduce((total, order) => {
+            return total + order.order_price;
+        }, 0);
+
+        const productsInfo = {};
+
+        paymentOrders.forEach(({ orderDetails }) => {
+            orderDetails.forEach(({ product_id, product_size, quantity_buy }) => {
+                productsInfo[product_id] = productsInfo[product_id] || { product_id, product_size, quantity_buy: 0 };
+                productsInfo[product_id].quantity_buy += quantity_buy;
+            });
+        });
+
+        const listProductInfo = Object.values(productsInfo);
+
+        return { totalRevenue, totalOrder: paymentOrders.length, listProductInfo };
     }
 }
 

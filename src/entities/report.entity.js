@@ -1,5 +1,5 @@
 const { EntitySchema } = require("typeorm")
-const { reportString, storeString } = require("../constants/entityName.js")
+const { reportString, storeString, reportDetailString } = require("../constants/entityName.js")
 
 const reportEntity = new EntitySchema({
   name: reportString,
@@ -9,7 +9,13 @@ const reportEntity = new EntitySchema({
       primary: true,
       generated: true
     },
-    report_date: {
+    create_date: {
+      type: "date"
+    },
+    start_date: {
+      type: "date"
+    },
+    end_date: {
       type: "date"
     },
     report_revenue: {
@@ -32,6 +38,11 @@ const reportEntity = new EntitySchema({
         name: "store_id"
       },
       inverseSide: "store_user_relation"
+    },
+    report_reportDetail_relation: {
+      target: reportDetailString,
+      type: "one-to-many",
+      inverseSide: "reportDetail_report_relation"
     }
   }
 })

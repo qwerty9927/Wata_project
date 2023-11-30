@@ -13,4 +13,7 @@ router.use('/orders', require("./order.route"));
 // User route
 router.use("/users", require("./user.route"))
 
+// Report route
+router.use('/reports', require("./report.route"));
+
 module.exports = router 
