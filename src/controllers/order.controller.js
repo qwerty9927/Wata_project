@@ -16,6 +16,13 @@ class OrderController {
         }).send({ res });
     }
 
+    async getAllOrder(req, res, next) {
+        new SuccessResponse({
+            metadata: await orderService.getAllOrder(),
+            code: 200
+        }).send({ res });
+    }
+
     async postCreateOrder(req, res, next) {
         const errors = validationResult(req);
 

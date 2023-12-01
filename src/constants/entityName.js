@@ -8,6 +8,7 @@ const productSizeString = "product_size"
 const productString = "product"
 const productPriceString = "product_price"
 const orderDetailString = "order_detail"
+const reportDetailString = "report_detail"
 module.exports = {
   userString,
   roleString,
@@ -18,5 +19,6 @@ module.exports = {
   orderString,
   productSizeString,
   productString,
-  productPriceString
+  productPriceString,
+  reportDetailString
 }

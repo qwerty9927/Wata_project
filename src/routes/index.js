@@ -16,4 +16,7 @@ router.use("/users", require("./user.route"))
 // Stores route
 router.use("/stores", require("./store.route"))
 
-module.exports = router
+// Report route
+router.use('/reports', require("./report.route"));
+
+module.exports = router 

@@ -19,10 +19,16 @@ const convertGetOneOrderReturn = (order) => {
     })
 
     const orderDetails = order.order_orderDetail_relation.map((item) => {
-        return getInfoData({
-            fileds: ['product_id', 'product_size', 'quantity_buy'],
+        const { orderDetail_product_relation, product_id, product_size, quantity_buy } = getInfoData({
+            fileds: ['orderDetail_product_relation', 'product_id', 'product_size', 'quantity_buy'],
             object: item
         })
+        return {
+            product_id,
+            product_name: orderDetail_product_relation?.product_name || null,
+            product_size,
+            quantity_buy
+        }
     })
 
     return { ...orderInfo, orderDetails }
