@@ -8,6 +8,7 @@ const cloudinaryHelper = require("../helpers/cloudinary");
 
 const authentication = require("../middlewares/authentication");
 const checkRole = require("../middlewares/checkRole");
+const handleMulterError = require("../middlewares/handleMulterError");
 
 // Get all product
 router.get('/', asyncHandler(productControler.getAllProduct));
@@ -16,15 +17,31 @@ router.get('/', asyncHandler(productControler.getAllProduct));
 router.get('/:id', asyncHandler(productControler.getProductById));
 
 // Create new product
-router.post('/', authentication, checkRole(["Admin", "Staff"]), cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.postCreateProduct));
+router.post('/',
+    authentication,
+    checkRole(["Admin", "Staff"]),
+    cloudinaryHelper.uploadFileToCloud('productImage', 'products'),
+    productValidate.validator(),
+    handleMulterError,
+    asyncHandler(productControler.postCreateProduct));
 
 // Update value for product
-router.put('/:id', authentication, checkRole(["Admin", "Staff"]), cloudinaryHelper.uploadFileToCloud('productImage', 'products'), productValidate.validator(), asyncHandler(productControler.putUpdateProduct));
+router.put('/:id',
+    authentication,
+    checkRole(["Admin", "Staff"]),
+    cloudinaryHelper.uploadFileToCloud('productImage', 'products'),
+    productValidate.validator(),
+    handleMulterError,
+    asyncHandler(productControler.putUpdateProduct));
 
 // Add price for product
-router.post('/:productId/prices', authentication, checkRole(["Admin", "Staff"]), productPriceValidate.validator(), asyncHandler(productControler.postAddProductPrice));
+router.post('/:productId/prices',
+    authentication,
+    checkRole(["Admin", "Staff"]),
+    productPriceValidate.validator(),
+    asyncHandler(productControler.postAddProductPrice));
 
 // Delete one product
-router.delete('/:id', authentication, checkRole(["Admin", "Staff"]), asyncHandler(productControler.deleteOneProduct));
+router.delete('/:id', authentication, checkRole(["Admin"]), asyncHandler(productControler.deleteOneProduct));
 
 module.exports = router

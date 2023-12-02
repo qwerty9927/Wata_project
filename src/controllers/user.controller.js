@@ -14,10 +14,10 @@ class UserController {
 
   async changeRole(req, res, next) {
     const resultValidate = validationResult(req).array()
-    if (resultValidate.length !== 0){
+    if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    const {user_id, role_id} = req.body
+    const { user_id, role_id } = req.body
     new SuccessResponse({
       metadata: await UserService.changeRole(user_id, role_id)
     }).send({ res })
@@ -25,11 +25,11 @@ class UserController {
 
   async modifyProfile(req, res, next) {
     const resultValidate = validationResult(req).array()
-    if (resultValidate.length !== 0){
+    if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    const profile = getInfoData({fileds: ["full_name", "user_phone", "user_email", "user_address"], object: req.body})
-    if(isObjectEmpty(profile)){
+    const profile = getInfoData({ fileds: ["full_name", "user_phone", "user_email", "user_address"], object: req.body })
+    if (isObjectEmpty(profile)) {
       throw new UnprocessableContentResponse()
     }
     new SuccessResponse({
@@ -39,10 +39,10 @@ class UserController {
 
   async changePassword(req, res, next) {
     const resultValidate = validationResult(req).array()
-    if (resultValidate.length !== 0){
+    if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    const {current_password, new_password} = req.body
+    const { current_password, new_password } = req.body
     new SuccessResponse({
       metadata: await UserService.changePassword(req.user_id, current_password, new_password)
     }).send({ res })
@@ -52,6 +52,17 @@ class UserController {
     new SuccessResponse({
       metadata: await UserService.getAllUser()
     }).send({ res })
+  }
+
+  async getMyOrderByUserId(req, res, next) {
+    const userId = req.user_id;
+    const orderCode = req.query.orderCode;
+    const result = await UserService.getMyOrder(userId, orderCode);
+
+    new SuccessResponse({
+      metadata: result,
+      code: 200
+    }).send({ res });
   }
 }
 

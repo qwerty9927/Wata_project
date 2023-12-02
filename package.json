@@ -7,7 +7,13 @@
     "test": "dotenv -e .env.test.local -- jest",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "dev:db-test": "dotenv -e .env.test.local -- nodemon server.js"
+    "dev:db-test": "dotenv -e .env.test.local -- nodemon server.js",
+    "build:db-test": "dotenv -e .env.test.local -- node seeder.js -i",
+    "build:db": "dotenv -e .env -- node seeder.js -i",
+    "clean:db-test": "dotenv -e .env.test.local -- node seeder.js -d",
+    "clean:db": "dotenv -e .env -- node seeder.js -d",
+    "restart:db-test": "npm run clean:db-test && npm run build:db-test",
+    "restart:db": "npm run clean:db && npm run build:db"
   },
   "author": "",
   "license": "ISC",
