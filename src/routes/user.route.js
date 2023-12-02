@@ -18,4 +18,7 @@ router.get("/", authentication, checkRole(["Staff", "Admin"]), asyncHandler(User
 // Admin
 router.patch("/change-role", authentication, checkRole(["Admin"]), changeRoleValidate, asyncHandler(UserController.changeRole))
 
+// Get my order
+router.get("/order", authentication, checkRole(["Customer", "Staff", "Admin"]), asyncHandler(UserController.getMyOrderByUserId))
+
 module.exports = router
