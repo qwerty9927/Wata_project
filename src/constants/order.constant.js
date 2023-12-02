@@ -15,5 +15,8 @@ module.exports = {
             QUANTITY_BUY: 'quantityBuy: Quantity buy in order detail must not be empty and must be a integer value',
         }
     },
-    ORDER_CONFLICT_MSG: "Order is existed!"
+    ORDER_CONFLICT_MSG: "Order is existed!",
+    PAGINATION: {
+        MAX_LIMIT: 20
+    }
 };

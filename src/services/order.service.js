@@ -1,13 +1,13 @@
 const { ErrorResponse, ConflictResponse } = require("../common/error.response");
 const { orderString, orderDetailString, userString, productPriceString, storeString } = require("../constants/entityName");
-const { convertCreateOrderReturn, convertGetOrdersReturn, convertGetOneOrderReturn } = require("../dto/orders.dto");
+const { convertCreateOrderReturn, convertGetOrdersReturn } = require("../dto/orders.dto");
 const { orderConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
 const productService = require("./product.service");
 const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
-const relationOrderDetailProduct = 'order_orderDetail_relation.orderDetail_product_relation'
+const relationOrderDetailProduct = 'order_orderDetail_relation.orderDetail_product_relation';
 
 const { Between, In } = require("typeorm");
 
@@ -20,23 +20,16 @@ class OrderService {
         this.storeRepo = AppDataSource.getRepository(storeString);
     }
 
-    async getAllOrder() {
-        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct] })
-        return convertGetOrdersReturn(orders);
-    }
+    async getAllOrder(page = 1, limit = 10, storeId) {
+        const maxLimit = orderConstant.PAGINATION.MAX_LIMIT;
 
-    async getAllOrderByUserId(userId) {
-        const orders = await this.orderRepo.find({ where: { user_id: userId }, relations: [relationOrderOderDetail, relationOrderDetailProduct] })
-        return convertGetOrdersReturn(orders);
-        // return orders;
-    }
+        // Pagination
+        page = Math.max(1, parseInt(page)) || 1;
+        limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
+        const skip = (page - 1) * limit;
 
-    async getOrderByOrderCode(userId, orderCode) {
-        const order = await this.orderRepo.findOne({ where: { user_id: userId, order_code: orderCode }, relations: [relationOrderOderDetail, relationOrderDetailProduct] });
-        if (!order) {
-            throw new ErrorResponse("Order not found!", 404);
-        }
-        return convertGetOneOrderReturn(order);
+        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct], where: { store_id: storeId }, skip, take: limit });
+        return convertGetOrdersReturn(orders);
     }
 
     async createOrder({ orderCode, orderStatus, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
