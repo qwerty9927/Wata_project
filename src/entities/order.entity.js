@@ -53,7 +53,7 @@ const orderEntity = new EntitySchema({
       type: "varchar",
     },
     recipient_phone: {
-      type: "int",
+      type: "varchar",
     },
   },
   relations: {
