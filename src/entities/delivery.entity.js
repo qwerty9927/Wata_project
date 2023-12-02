@@ -7,27 +7,27 @@ const deliveryEntity = new EntitySchema({
     delivery_id: {
       type: "int",
       primary: true,
-      generated: true
+      generated: true,
     },
     sender_name: {
-      type: "varchar"
+      type: "varchar",
     },
     sender_phone: {
-      type: "int"
+      type: "varchar",
     },
     recipient_name: {
-      type: "varchar"
+      type: "varchar",
     },
     recipient_phone: {
-      type: "int"
+      type: "varchar",
     },
     recipient_address: {
-      type: "varchar"
+      type: "varchar",
     },
     delivery_date: {
-      type: "date"
-    }
-  }
+      type: "date",
+    },
+  },
 })
 
 module.exports = deliveryEntity

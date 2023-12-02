@@ -8,8 +8,8 @@ const { orderValidate } = require("../validates/index");
 const authentication = require("../middlewares/authentication");
 const checkRole = require("../middlewares/checkRole");
 
-// Get orders by userId
-router.get('/', authentication, checkRole(["Admin", "Staff", "Customer"]), asyncHandler(orderControler.getOrderByUserId));
+// Get all order 
+router.get('/', authentication, checkRole(["Admin", "Staff"]), asyncHandler(orderControler.getAllOrder));
 
 // Create new product
 router.post('/', authentication, checkRole(["Admin", "Staff", "Customer"]), orderValidate.validatorForCreate(), asyncHandler(orderControler.postCreateOrder));

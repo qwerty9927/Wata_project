@@ -20,7 +20,7 @@ const registerValidate = checkSchema({
     isLength: {
       options: { min: 1, max: 20 },
     },
-    isAlphanumeric: true,
+    matches: { options: /^[a-zA-Z0-9\s]+$/ },
     errorMessage: "Invalid name! Name must be alpha characters.",
   },
   user_phone: {
@@ -43,17 +43,17 @@ const loginValidate = checkSchema({
   user_password: {
     notEmpty: true,
     errorMessage: "Password is not empty!",
-  }
+  },
 })
 
 const forgotPasswordValidate = checkSchema({
   user_email: {
     isEmail: true,
     errorMessage: "Invalid email!",
-  }
+  },
 })
 module.exports = {
   registerValidate,
   loginValidate,
-  forgotPasswordValidate
+  forgotPasswordValidate,
 }

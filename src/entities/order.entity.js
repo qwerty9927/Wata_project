@@ -1,5 +1,10 @@
 const { EntitySchema } = require("typeorm")
-const { orderString, userString, orderDetailString } = require("../constants/entityName.js")
+const {
+  orderString,
+  userString,
+  orderDetailString,
+  storeString,
+} = require("../constants/entityName.js")
 
 const orderEntity = new EntitySchema({
   name: orderString,
@@ -24,7 +29,7 @@ const orderEntity = new EntitySchema({
       ],
     },
     order_address: {
-      type: "varchar"
+      type: "varchar",
     },
     fee_transport: {
       type: "double",
@@ -36,7 +41,7 @@ const orderEntity = new EntitySchema({
       type: "double",
     },
     order_date: {
-      type: "timestamp"
+      type: "timestamp",
     },
     user_id: {
       type: "int",
@@ -48,7 +53,7 @@ const orderEntity = new EntitySchema({
       type: "varchar",
     },
     recipient_phone: {
-      type: "int"
+      type: "varchar",
     },
   },
   relations: {
@@ -57,15 +62,23 @@ const orderEntity = new EntitySchema({
       type: "many-to-one",
       joinColumn: {
         name: "user_id",
-        referencedColumnName: 'user_id',
-      }
+        referencedColumnName: "user_id",
+      },
     },
     order_orderDetail_relation: {
       target: orderDetailString,
       type: "one-to-many",
-      inverseSide: "orderDetail_order_relation"
-    }
-  }
+      inverseSide: "orderDetail_order_relation",
+    },
+    order_store_relation: {
+      target: storeString,
+      type: "many-to-one",
+      joinColumn: {
+        name: "store_id",
+      },
+      inverseSide: "store_order_relation",
+    },
+  },
 })
 
 module.exports = orderEntity

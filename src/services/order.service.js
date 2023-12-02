@@ -1,12 +1,15 @@
 const { ErrorResponse, ConflictResponse } = require("../common/error.response");
-const { orderString, orderDetailString, userString, productPriceString } = require("../constants/entityName");
-const { convertCreateOrderReturn, convertGetOrdersReturn, convertGetOneOrderReturn } = require("../dto/orders.dto");
+const { orderString, orderDetailString, userString, productPriceString, storeString } = require("../constants/entityName");
+const { convertCreateOrderReturn, convertGetOrdersReturn } = require("../dto/orders.dto");
 const { orderConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
 const productService = require("./product.service");
 const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
+const relationOrderDetailProduct = 'order_orderDetail_relation.orderDetail_product_relation';
+
+const { Between, In } = require("typeorm");
 
 class OrderService {
     constructor() {
@@ -14,20 +17,19 @@ class OrderService {
         this.orderDetailRepo = AppDataSource.getRepository(orderDetailString);
         this.userRepo = AppDataSource.getRepository(userString);
         this.productPriceRepo = AppDataSource.getRepository(productPriceString);
+        this.storeRepo = AppDataSource.getRepository(storeString);
     }
 
-    async getAllOrderByUserId(userId) {
-        const orders = await this.orderRepo.find({ where: { user_id: userId }, relations: [relationOrderOderDetail] })
+    async getAllOrder(page = 1, limit = 10, storeId) {
+        const maxLimit = orderConstant.PAGINATION.MAX_LIMIT;
+
+        // Pagination
+        page = Math.max(1, parseInt(page)) || 1;
+        limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
+        const skip = (page - 1) * limit;
+
+        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct], where: { store_id: storeId }, skip, take: limit });
         return convertGetOrdersReturn(orders);
-        // return orders;
-    }
-
-    async getOrderByOrderCode(userId, orderCode) {
-        const order = await this.orderRepo.findOne({ where: { user_id: userId, order_code: orderCode }, relations: [relationOrderOderDetail] });
-        if (!order) {
-            throw new ErrorResponse("Order not found!", 404);
-        }
-        return convertGetOneOrderReturn(order);
     }
 
     async createOrder({ orderCode, orderStatus, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
@@ -35,6 +37,12 @@ class OrderService {
         const existingOrder = await this.orderRepo.findOne({ where: { order_code: orderCode } });
         if (existingOrder) {
             throw new ConflictResponse(orderConstant.ORDER_CONFLICT_MSG);
+        }
+
+        // Check existing store
+        const existingStore = await this.storeRepo.findOne({ where: { store_id: storeId } });
+        if (!existingStore) {
+            throw new ErrorResponse('Store not found!', 404);
         }
 
         if (setAddressDefault || setPhoneDefault) {
@@ -100,6 +108,34 @@ class OrderService {
             totalPrice += (priceItem * item.quantityBuy);
         }
         return totalPrice;
+    }
+
+    async calculateTotalRevenueAndTotalOrder(storeId, startDate, endDate) {
+        const paymentOrders = convertGetOrdersReturn(await this.orderRepo.find({
+            where: {
+                store_id: storeId,
+                order_status: In(["payment", "done"]),
+                order_date: Between(startDate, endDate)
+            },
+            relations: [relationOrderOderDetail, relationOrderDetailProduct]
+        }))
+
+        const totalRevenue = paymentOrders.reduce((total, order) => {
+            return total + order.order_price;
+        }, 0);
+
+        const productsInfo = {};
+
+        paymentOrders.forEach(({ orderDetails }) => {
+            orderDetails.forEach(({ product_id, product_name, product_size, quantity_buy }) => {
+                productsInfo[product_id] = productsInfo[product_id] || { product_id, product_name, product_size, quantity_buy: 0 };
+                productsInfo[product_id].quantity_buy += quantity_buy;
+            });
+        });
+
+        const listProductInfo = Object.values(productsInfo);
+
+        return { totalRevenue, totalOrder: paymentOrders.length, listProductInfo };
     }
 }
 

@@ -22,7 +22,7 @@ const userEntity = new EntitySchema({
       type: "varchar"
     },
     user_phone: {
-      type: "int"
+      type: "varchar"
     },
     user_email: {
       type: "varchar"

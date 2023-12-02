@@ -5,13 +5,11 @@ const orderService = require("../services/order.service");
 const { validationResult } = require("express-validator");
 
 class OrderController {
-    async getOrderByUserId(req, res, next) {
-        const userId = req.user_id;
-        const orderCode = req.query.orderCode;
-        const result = !orderCode ? await orderService.getAllOrderByUserId(userId) : await orderService.getOrderByOrderCode(userId, orderCode);
+    async getAllOrder(req, res, next) {
+        const { storeId, page, limit } = req.query;
 
         new SuccessResponse({
-            metadata: result,
+            metadata: await orderService.getAllOrder(page, limit, storeId),
             code: 200
         }).send({ res });
     }
