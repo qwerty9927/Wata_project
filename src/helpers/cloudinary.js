@@ -39,7 +39,7 @@ const uploadFileToCloud = (field, main, fileSizeMb = 3, fileExtention = ['png', 
             if (mimeType && extName) {
                 return cb(null, true);
             } else {
-                const errUpload = new ErrorResponse("Error upload file");
+                const errUpload = new ErrorResponse("Error upload file: file types must be png/jpg/gif/jpeg", 422);
                 cb(errUpload);
             }
         }
