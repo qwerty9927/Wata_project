@@ -1,5 +1,4 @@
 const { checkSchema } = require("express-validator")
-const { options } = require("../routes/product.route")
 
 const registerValidate = checkSchema({
   user_name: {

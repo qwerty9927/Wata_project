@@ -31,7 +31,7 @@ SET time_zone = "+00:00";
 --   `sender_name` varchar(255) NOT NULL,
 --   `sender_phone` int(11) NOT NULL,
 --   `recipient_name` varchar(255) NOT NULL,
---   `recipient_phone` int(11) NOT NULL,
+--   `recipient_phone` varchar(255) NOT NULL,
 --   `recipient_address` varchar(255) NOT NULL,
 --   `delivery_date` date DEFAULT NULL
 -- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -62,7 +62,7 @@ CREATE TABLE `order` (
   `store_id` int(10) NOT NULL,
   `order_address` varchar(255) NOT NULL,
   `recipient_name` varchar(255) NOT NULL,
-  `recipient_phone` int(11) NOT NULL
+  `recipient_phone` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -262,7 +262,7 @@ CREATE TABLE `user` (
   `user_password` varchar(255) NOT NULL,
   `full_name` varchar(255) NOT NULL,
   `user_address` varchar(255) DEFAULT NULL,
-  `user_phone` int(11) NOT NULL,
+  `user_phone` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
 	`token` varchar(255) DEFAULT NULL,
   `role_id` int(10) NOT NULL DEFAULT 2,
@@ -274,9 +274,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `full_name`, `user_address`, `user_phone`, `user_email`, `role_id`, `store_id`) VALUES
-(1, 'admin', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'Admin', '1234/ad/d', 778070683, 'abc@gmail.com', 1, NULL),
-(2, 'Tuan', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'NAT', '123 Duong A, Phuong B, Quan C, HCM', 2147483647, 'nat21102002@gmail.com', 1, NULL),
-(3, 'Tan', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'MinhTan', 'a/b/c', 778070683, 'tanvo9927@gmail.com', 1, NULL);
+(1, 'admin', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'Admin', '1234/ad/d', '0778070683', 'abc@gmail.com', 1, NULL),
+(2, 'Tuan', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'NAT', '123 Duong A, Phuong B, Quan C, HCM', '0147483647', 'nat21102002@gmail.com', 1, NULL),
+(3, 'Tan', '$2b$10$zo9zE9vvYuhe6Qu35eYtEO5CwmztN5MwL9Fj0sjBkTW8vu9GQvY0S', 'MinhTan', 'a/b/c', '0778070683', 'tanvo9927@gmail.com', 1, NULL);
 
 -- password Tuan/Tan: 888888888
 --
