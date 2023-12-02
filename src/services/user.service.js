@@ -115,7 +115,10 @@ class UserService {
 
   async getAllUser() {
     const foundUsers = await (await this.getUserRepository()).find({
-      select: this.selection
+      select: {
+        ...this.selection,
+        role_id: true
+      }
     })
     return foundUsers
   }
