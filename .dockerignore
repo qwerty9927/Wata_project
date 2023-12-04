@@ -1,0 +1,17 @@
+coverage
+
+logs
+
+node_modules
+
+reports
+
+.env.test.local
+env.example
+
+jest.config.js
+
+src/tests
+
+git
+.gitignore
