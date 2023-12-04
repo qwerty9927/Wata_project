@@ -84,7 +84,7 @@ CREATE TABLE `order_detail` (
   `quantity_buy` tinyint(4) NOT NULL,
   `order_id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
-  `product_size` varchar(255) NOT NULL
+  `product_size_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
@@ -304,7 +304,8 @@ ALTER TABLE `order`
 ALTER TABLE `order_detail`
   ADD PRIMARY KEY (`order_detail_id`),
   ADD KEY `order_id` (`order_id`),
-  ADD KEY `product_id` (`product_id`);
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `product_size_id` (`product_size_id`);
  
 
 --
@@ -449,7 +450,8 @@ ALTER TABLE `order`
 --
 ALTER TABLE `order_detail`
   ADD CONSTRAINT `order_detail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`),
-  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`);
+  ADD CONSTRAINT `order_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`),
+  ADD CONSTRAINT `order_detail_ibfk_3` FOREIGN KEY (`product_size_id`) REFERENCES `product_size` (`product_size_id`);
 
 --
 -- Constraints for table `product price`
