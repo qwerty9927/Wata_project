@@ -35,6 +35,9 @@ const userEntity = new EntitySchema({
     },
     store_id: {
       type: "int"
+    },
+    verify_token: {
+      type: "varchar"
     }
   },
   relations: {

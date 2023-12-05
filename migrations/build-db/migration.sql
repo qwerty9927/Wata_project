@@ -265,6 +265,7 @@ CREATE TABLE `user` (
   `user_phone` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
 	`token` varchar(255) DEFAULT NULL,
+	`verify_token` varchar(255) DEFAULT NULL,
   `role_id` int(10) NOT NULL DEFAULT 2,
   `store_id` int(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
