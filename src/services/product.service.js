@@ -109,15 +109,6 @@ class ProductService {
     product.is_deleted = true;
     await this.productRepo.save(product);
   }
-
-  async getPriceProduct(productId, productSize) {
-    const product = await this.findOneProduct(productId, ['productPrice', 'productPrice.productSize']);
-    const sizeInfo = product.sizes.find(size => size.size_name === productSize);
-    if (!sizeInfo) {
-      throw new ErrorResponse(`Size ${productSize} not found in ${product.product_name} product`, 404);
-    }
-    return sizeInfo.product_price;
-  }
 }
 
 module.exports = new ProductService();

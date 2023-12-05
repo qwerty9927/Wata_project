@@ -1,9 +1,8 @@
 const { ErrorResponse, ConflictResponse } = require("../common/error.response");
-const { orderString, orderDetailString, userString, productPriceString, storeString } = require("../constants/entityName");
+const { orderString, orderDetailString, productPriceString, storeString } = require("../constants/entityName");
 const { convertCreateOrderReturn, convertGetOrdersReturn } = require("../dto/orders.dto");
 const { orderConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
-const productService = require("./product.service");
 const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
@@ -15,7 +14,6 @@ class OrderService {
     constructor() {
         this.orderRepo = AppDataSource.getRepository(orderString);
         this.orderDetailRepo = AppDataSource.getRepository(orderDetailString);
-        this.userRepo = AppDataSource.getRepository(userString);
         this.productPriceRepo = AppDataSource.getRepository(productPriceString);
         this.storeRepo = AppDataSource.getRepository(storeString);
     }
@@ -81,7 +79,7 @@ class OrderService {
                 quantity_buy: orderDetail.quantityBuy,
                 order_id: savedOrder.order_id,
                 product_id: orderDetail.productId,
-                product_size: orderDetail.productSize
+                product_size_id: orderDetail.productSizeId
             })
         })
 
@@ -101,13 +99,30 @@ class OrderService {
         await this.orderRepo.save(order);
     }
 
-    async calculateTotalPriceProduct(orderDetail) {
-        let totalPrice = 0;
-        for (let item of orderDetail) {
-            const priceItem = await productService.getPriceProduct(item.productId, item.productSize);
-            totalPrice += (priceItem * item.quantityBuy);
-        }
-        return totalPrice;
+    async calculateTotalPriceProduct(orderDetails) {
+        let totalProductPrice = 0;
+        const productIds = orderDetails.map(item => item.productId);
+        const sizeIds = orderDetails.map(item => item.productSizeId);
+
+        const productPrices = await this.productPriceRepo.find({ where: { product_id: In(productIds), product_size_id: In(sizeIds) } });
+
+        orderDetails.forEach(orderDetail => {
+            const { productId, productSizeId, quantityBuy } = orderDetail;
+
+            const matchingPrice = productPrices.find(
+                price =>
+                    price.product_id === productId && price.product_size_id === productSizeId
+            );
+
+            if (matchingPrice) {
+                totalProductPrice += quantityBuy * matchingPrice.product_price;
+            } else {
+                throw new ErrorResponse(`ProductId ${productId} no existing`, 404);
+            }
+        });
+
+        // console.log({ totalProductPrice });
+        return totalProductPrice;
     }
 
     async calculateTotalRevenueAndTotalOrder(storeId, startDate, endDate) {

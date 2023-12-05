@@ -13,7 +13,9 @@
     "clean:db-test": "dotenv -e .env.test.local -- node seeder.js -d",
     "clean:db": "dotenv -e .env -- node seeder.js -d",
     "restart:db-test": "npm run clean:db-test && npm run build:db-test",
-    "restart:db": "npm run clean:db && npm run build:db"
+    "restart:db": "npm run clean:db && npm run build:db",
+    "app:create:docker": "docker compose up -d --build",
+    "app:remove:docker": "docker-compose down && docker rmi pizza-top-app:v1"
   },
   "author": "",
   "license": "ISC",

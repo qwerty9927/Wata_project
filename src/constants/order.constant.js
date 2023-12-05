@@ -9,9 +9,9 @@ module.exports = {
         SET_ADDRESS_DEFAULT: 'setAddressDefault: must be a boolean value',
         SET_PHONE_DEFAULT: 'setPhoneDefault: must be a boolean value',
         ORDER_DETAIL: {
-            MAIN: "orderDetails: Order detail must be one array",
+            MAIN: "orderDetails: Order detail must be one array, and not empty product",
             PRODUCT_ID: 'productId: Product ID in order detail must not be empty and must be a integer value',
-            PRODUCT_SIZE: 'productSize: Product size must be one of: %s',
+            PRODUCT_SIZE_ID: 'productSizeId: Product size id must be one of: %s',
             QUANTITY_BUY: 'quantityBuy: Quantity buy in order detail must not be empty and must be a integer value',
         }
     },
