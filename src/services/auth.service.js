@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const nodemailer = require("nodemailer")
 const crypto = require("crypto")
 const Connection = require("../db/connect")
 const config = require("../configs")
 const { userString } = require("../constants/entityName")
+const transporter = require("../helpers/mailer")
 const { authMessageResponse } = require("../constants")
 const {
   ConflictResponse,
@@ -97,29 +97,66 @@ class AuthService {
     await (await this.getUserRepository()).update({ user_id }, { token: null })
   }
 
-  async resetPassword(user_email) {
+  async requestChangePassword(user_email){
     // Find user by email
-    const foundUser = await (
-      await this.getUserRepository()
-    ).findOneBy({
-      user_email,
+    const foundUser = await (await this.getUserRepository()).findOneBy({
+      user_email
     })
-    if (!foundUser) {
+    if(!foundUser){
+      throw new BadRequest(authMessageResponse.emailNotSigned)
+    }
+    
+    // Create token
+    const payload = {
+      user_email
+    }
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: config.resetPasswordTokenExpiresIn })
+
+    // Write to database
+    await (await this.getUserRepository()).update(
+      { user_id: foundUser.user_id },
+      { verify_token: token}
+    )
+
+    // Send confirm to user
+    const comfirmLink = `http://${config.server.host}:${config.server.port}/api/v1/auth/comfirm-change-password?email=${user_email}&token=${token}`
+    const mailOptions = {
+      from: config.emailName,
+      to: user_email,
+      subject: "[Pizza store] Comfirm reset password",
+      text: `We have received a request to reset the password for your account. To complete this process, please click on the link below. ${comfirmLink}`,
+    }
+
+    await transporter.sendMail(mailOptions)
+  }
+
+  async verificationOfChange(user_email, token) {
+    // Find user by email
+    const foundUser = await (await this.getUserRepository()).findOneBy({
+      user_email
+    })
+    if(!foundUser){
       throw new BadRequest(authMessageResponse.emailNotSigned)
     }
 
+    if(token !== foundUser.verify_token){
+      throw new BadRequest(authMessageResponse.tokenIsNotExist)
+    }
+
+    // Verify token
+    try {
+      jwt.verify(foundUser.verify_token, config.jwtSecret)
+      this.resetPassword(user_email, foundUser)
+    } catch{
+      throw new AuthFailureResponse(authMessageResponse.tokenExpired)
+    }
+  }
+
+  async resetPassword(user_email, foundUser) {
     // Generate password
     const password = crypto.randomBytes(4).toString("hex")
 
     // Send mail
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: config.emailName,
-        pass: config.emailPassword,
-      },
-    })
-
     const mailOptions = {
       from: config.emailName,
       to: user_email,
@@ -135,7 +172,7 @@ class AuthService {
     const hashPassword = await bcrypt.hash(password, 10)
     await (
       await this.getUserRepository()
-    ).update({ user_id: foundUser.user_id }, { user_password: hashPassword })
+    ).update({ user_id: foundUser.user_id }, { user_password: hashPassword, verify_token: null })
   }
 }
 

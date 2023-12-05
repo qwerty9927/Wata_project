@@ -52,8 +52,23 @@ const forgotPasswordValidate = checkSchema({
     errorMessage: "Invalid email!",
   },
 })
+
+const comfirmChangePassword = checkSchema({
+  email: {
+    isEmail: true,
+    errorMessage: "Invalid email!",
+  },
+  token: {
+    matches: {
+      options: /([a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_.+/=]+)/
+    },
+    errorMessage: "Invalid token!",
+  },
+})
+
 module.exports = {
   registerValidate,
   loginValidate,
   forgotPasswordValidate,
+  comfirmChangePassword
 }

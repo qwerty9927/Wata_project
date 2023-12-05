@@ -20,7 +20,8 @@ const config = {
   tokenExpiresIn: process.env.TOKEN_EXPIRESIN,
   emailName: process.env.EMAIL_NAME,
   emailPassword: process.env.EMAIL_PASSWORD,
-  jwtSecret: process.env.JWT_SECRET
+  jwtSecret: process.env.JWT_SECRET,
+  resetPasswordTokenExpiresIn: process.env.RESET_PASSWORD_TOKEN_EXPIRESIN
 }
 
 module.exports = config
