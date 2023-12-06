@@ -8,6 +8,7 @@ const { convertGetOrdersReturn, convertGetOneOrderReturn } = require("../dto/ord
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
 const relationOrderDetailProduct = 'order_orderDetail_relation.orderDetail_product_relation';
+const relationOrderDetailProductSize = 'order_orderDetail_relation.orderDetail_productSize_relation';
 
 class UserService {
   constructor() {
@@ -132,12 +133,12 @@ class UserService {
   }
 
   async getAllOrderByUserId(userId) {
-    const orders = await (await this.getOrderRepository()).find({ where: { user_id: userId }, relations: [relationOrderOderDetail, relationOrderDetailProduct] })
+    const orders = await (await this.getOrderRepository()).find({ where: { user_id: userId }, relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize] })
     return convertGetOrdersReturn(orders)
   }
 
   async getOrderByOrderCode(userId, orderCode) {
-    const order = await (await this.getOrderRepository()).findOne({ where: { user_id: userId, order_code: orderCode }, relations: [relationOrderOderDetail, relationOrderDetailProduct] })
+    const order = await (await this.getOrderRepository()).findOne({ where: { user_id: userId, order_code: orderCode }, relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize] })
     if (!order) {
       throw new ErrorResponse("Order not found!", 404)
     }

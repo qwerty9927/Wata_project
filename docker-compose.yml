@@ -12,15 +12,15 @@ services:
     expose:
       - 3306
     volumes:
-      - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
-      - $HOME/database:/var/lib/mysql
+      # - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
+      # - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
+      - $HOME/database:/var/lib/mysql # C:\Users\lapTopName bind mount to /var/lib/mysql in docker 
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
       MYSQL_DATABASE: pizzadb
       MYSQL_USER: admin
       MYSQL_PASSWORD: abc123456789
       SERVICE_NAME: mysql-db
-      SERVICE_TAGS: prod
     networks:
       - internal-net01
 
@@ -41,12 +41,9 @@ services:
       MYSQL_PASSWORD: 'abc123456789'
       MYSQL_PORT: 3306
       SERVICE_NAME: pizza-top-app-service
-      SERVICE_TAGS: prod
     networks:
       - internal-net01
-        
-volumes:
-  mysql_data:
+
 networks:
   internal-net01:
     driver: bridge

@@ -20,31 +20,7 @@ SET time_zone = "+00:00";
 -- --
 -- -- Database: `wata_project_db`
 -- --
--- -- --------------------------------------------------------
--- 
--- --
--- -- Table structure for table `delivery`
--- --
 
--- CREATE TABLE `delivery` (
---   `delivery_id` int(10) NOT NULL,
---   `sender_name` varchar(255) NOT NULL,
---   `sender_phone` int(11) NOT NULL,
---   `recipient_name` varchar(255) NOT NULL,
---   `recipient_phone` varchar(255) NOT NULL,
---   `recipient_address` varchar(255) NOT NULL,
---   `delivery_date` date DEFAULT NULL
--- ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `delivery`
---
-
--- INSERT INTO `delivery` (`delivery_id`, `sender_name`, `sender_phone`, `recipient_name`, `recipient_phone`, `recipient_address`, `delivery_date`) VALUES
--- (1, 'John Doe', 2147483647, 'Alice Smith', 2147483647, '456 Maple Street', '2023-01-10'),
--- (2, 'Jane Doe', 2147483647, 'Bob Johnson', 2147483647, '789 Birch Lane', '2023-01-15');
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `order`
@@ -65,14 +41,6 @@ CREATE TABLE `order` (
   `recipient_phone` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Dumping data for table `order`
---
-
--- INSERT INTO `order` (`order_id`, `order_code`, `order_status`, `fee_transport`, `total_price_product`, `order_price`, `order_date`, `user_id`, `store_id`, `delivery_id`) VALUES
--- (1, 'ORD123', 'pending', 5.00, 1.00, 15.99, '2023-01-10 05:30:00', 2, 1, 1),
--- (2, 'ORD456', 'processing', 3.00, 2.00, 23.98, '2023-01-15 07:45:00', 3, 2, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -81,19 +49,11 @@ CREATE TABLE `order` (
 
 CREATE TABLE `order_detail` (
   `order_detail_id` int(10) NOT NULL,
-  `quantity_buy` tinyint(4) NOT NULL,
+  `quantity` tinyint(4) NOT NULL,
   `order_id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
   `product_size_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `order_detail`
---
-
--- INSERT INTO `order_detail` (`order_detail_id`, `quantity_buy`, `order_id`, `product_id`) VALUES
--- (1, 1, 1, 1),
--- (2, 2, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -199,16 +159,8 @@ CREATE TABLE `report_detail` (
   `report_id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
   `product_size` varchar(255) NOT NULL,
-  `quantity_buy` tinyint(4) NOT NULL
+  `sale_quantity` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Dumping data for table `report`
---
--- 
--- INSERT INTO `report` (`report_id`, `report_date`, `report_revenue`, `report_total_order`, `report_desc`, `store_id`) VALUES
--- (1, '2023-01-10', 15.99, 1, 'Daily report for SuperMart', 1),
--- (2, '2023-01-15', 23.98, 1, 'Daily report for QuickBites', 2);
 
 -- --------------------------------------------------------
 
@@ -285,19 +237,12 @@ INSERT INTO `user` (`user_id`, `user_name`, `user_password`, `full_name`, `user_
 --
 
 --
--- Indexes for table `delivery`
---
--- ALTER TABLE `delivery`
---   ADD PRIMARY KEY (`delivery_id`);
-
---
 -- Indexes for table `order`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`order_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `store_id` (`store_id`);
---   ADD KEY `delivery_id` (`delivery_id`);
 
 --
 -- Indexes for table `order_detail`
@@ -364,15 +309,6 @@ ALTER TABLE `user`
   ADD KEY `role_id` (`role_id`),
   ADD KEY `store_id` (`store_id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `delivery`
---
--- ALTER TABLE `delivery`
---   MODIFY `delivery_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order`
@@ -444,7 +380,6 @@ ALTER TABLE `user`
 ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`);
---   ADD CONSTRAINT `order_ibfk_3` FOREIGN KEY (`delivery_id`) REFERENCES `delivery` (`delivery_id`);
 
 --
 -- Constraints for table `order_detail`
