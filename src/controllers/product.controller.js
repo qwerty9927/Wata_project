@@ -32,7 +32,7 @@ class ProductController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      if (req.file?.filename) await cloudinaryHelper.removeFileOnCloud(req.file.filename);
+      if (req.file?.filename) cloudinaryHelper.removeFileOnCloud(req.file.filename);
       // Convert validation errors to an array of error messages
       const errorMessages = errors.array().map((error) => error.msg);
       throw new UnprocessableContentResponse(errorMessages);
@@ -52,7 +52,7 @@ class ProductController {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      if (req.file?.filename) await cloudinaryHelper.removeFileOnCloud(req.file.filename);
+      if (req.file?.filename) cloudinaryHelper.removeFileOnCloud(req.file.filename);
       // Convert validation errors to an array of error messages
       const errorMessages = errors.array().map((error) => error.msg);
       throw new UnprocessableContentResponse(errorMessages);

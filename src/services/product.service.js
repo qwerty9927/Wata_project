@@ -5,6 +5,7 @@ const cloudinaryHelper = require("../helpers/cloudinary");
 const AppDataSource = require("../db/data-source");
 const slugify = require("slugify");
 const { productConstant } = require("../constants");
+const cloudinary = require("../helpers/cloudinary");
 
 class ProductService {
   constructor() {
@@ -50,11 +51,12 @@ class ProductService {
     const product = await this.productRepo.findOne({ where: { is_deleted: false, product_id: productId } });
 
     if (!product) {
+      if (productImage) cloudinary.removeFileOnCloud(productImage);
       throw new ErrorResponse("Product not found", 404);
     }
 
     const oldProductImage = product.product_image;
-    if (productImage && oldProductImage) await cloudinaryHelper.removeFileOnCloud(oldProductImage);
+    if (productImage && oldProductImage) cloudinaryHelper.removeFileOnCloud(oldProductImage);
 
     product.product_name = productName;
     product.product_slug = slugify(productName, { lower: true });
@@ -62,7 +64,7 @@ class ProductService {
     product.product_desc = productDesc;
     product.category = category;
 
-    await this.productRepo.save(product);
+    return await this.productRepo.save(product);
   }
 
   async addProductPrice(productId, { size, price }) {
