@@ -50,12 +50,24 @@ class AuthController {
     }).send({ res })
   }
 
+  async requestChangePassword(req, res, next) {
+    const resultValidate = validationResult(req).array()
+    if (resultValidate.length !== 0) {
+      throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
+    }
+    await AuthService.requestChangePassword(req.body.user_email)
+    new SuccessResponse({
+      message: "Send mail success"
+    }).send({ res })
+  }
+
   async resetPassword(req, res, next) {
     const resultValidate = validationResult(req).array()
     if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    await AuthService.resetPassword(req.body.user_email)
+    const { email, token } = req.query
+    await AuthService.verificationOfChange(email, token)
     new SuccessResponse({
       message: "Reset password sucess"
     }).send({ res })
