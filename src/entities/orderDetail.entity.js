@@ -9,7 +9,7 @@ const orderDetailEntity = new EntitySchema({
       primary: true,
       generated: true
     },
-    quantity_buy: {
+    quantity: {
       type: "tinyint"
     },
     order_id: {

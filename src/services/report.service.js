@@ -67,17 +67,19 @@ class ReportService {
             store_id: storeId
         })
         const savedReport = await this.reportRepo.save(report);
-        const reportDetails = listProductInfo.map(({ product_name, ...element }) => ({
+        const reportDetails = listProductInfo.map(({ product_id, size, quantity }) => ({
             report_id: savedReport.report_id,
-            ...element
+            sale_quantity: quantity || null,
+            product_size: size || null,
+            product_id
         }));
 
         await this.reportDetailRepo.save(reportDetails);
 
         // Generate PDF and get file name
-        const pdfFileName = PDFReportService.generatePDF(savedReport, listProductInfo);
+        const path = PDFReportService.generatePDF(savedReport, listProductInfo);
 
-        return { report: savedReport, pdfFileName };
+        return { report: savedReport, path };
     }
 }
 

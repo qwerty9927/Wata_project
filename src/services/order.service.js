@@ -7,6 +7,7 @@ const userService = require("./user.service");
 
 const relationOrderOderDetail = 'order_orderDetail_relation';
 const relationOrderDetailProduct = 'order_orderDetail_relation.orderDetail_product_relation';
+const relationOrderDetailProductSize = 'order_orderDetail_relation.orderDetail_productSize_relation'
 
 const { Between, In } = require("typeorm");
 
@@ -26,7 +27,7 @@ class OrderService {
         limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
         const skip = (page - 1) * limit;
 
-        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct], where: { store_id: storeId }, skip, take: limit });
+        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize], where: { store_id: storeId }, skip, take: limit });
         return convertGetOrdersReturn(orders);
     }
 
@@ -76,7 +77,7 @@ class OrderService {
         // Create order detail
         const newOrderDetails = orderDetails.map(orderDetail => {
             return this.orderDetailRepo.create({
-                quantity_buy: orderDetail.quantityBuy,
+                quantity: orderDetail.quantityBuy,
                 order_id: savedOrder.order_id,
                 product_id: orderDetail.productId,
                 product_size_id: orderDetail.productSizeId
@@ -96,7 +97,7 @@ class OrderService {
         }
 
         order.order_status = orderStatus;
-        await this.orderRepo.save(order);
+        return await this.orderRepo.save(order);
     }
 
     async calculateTotalPriceProduct(orderDetails) {
@@ -117,7 +118,7 @@ class OrderService {
             if (matchingPrice) {
                 totalProductPrice += quantityBuy * matchingPrice.product_price;
             } else {
-                throw new ErrorResponse(`ProductId ${productId} no existing`, 404);
+                throw new ErrorResponse(`product_id ${productId} with size_id ${productSizeId} no existing`, 404);
             }
         });
 
@@ -132,7 +133,7 @@ class OrderService {
                 order_status: In(["payment", "done"]),
                 order_date: Between(startDate, endDate)
             },
-            relations: [relationOrderOderDetail, relationOrderDetailProduct]
+            relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize]
         }))
 
         const totalRevenue = paymentOrders.reduce((total, order) => {
@@ -142,9 +143,9 @@ class OrderService {
         const productsInfo = {};
 
         paymentOrders.forEach(({ orderDetails }) => {
-            orderDetails.forEach(({ product_id, product_name, product_size, quantity_buy }) => {
-                productsInfo[product_id] = productsInfo[product_id] || { product_id, product_name, product_size, quantity_buy: 0 };
-                productsInfo[product_id].quantity_buy += quantity_buy;
+            orderDetails.forEach(({ product_id, product_name, size, quantity }) => {
+                productsInfo[product_id] = productsInfo[product_id] || { product_id, product_name, size, quantity: 0 };
+                productsInfo[product_id].quantity += quantity;
             });
         });
 
