@@ -12,8 +12,8 @@ services:
     expose:
       - 3306
     volumes:
-      # - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
-      # - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
+      - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
       - $HOME/database:/var/lib/mysql # C:\Users\lapTopName bind mount to /var/lib/mysql in docker 
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
