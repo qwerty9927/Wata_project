@@ -44,7 +44,7 @@ class PDFReportService {
         // Finalize PDF
         doc.end();
 
-        return filePath;
+        return { filePath, fileName };
     }
 }
 

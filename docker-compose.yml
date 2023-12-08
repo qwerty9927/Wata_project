@@ -12,8 +12,8 @@ services:
     expose:
       - 3306
     volumes:
-      # - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
-      # - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
+      - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
       - $HOME/database:/var/lib/mysql # C:\Users\lapTopName bind mount to /var/lib/mysql in docker 
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
@@ -23,6 +23,12 @@ services:
       SERVICE_NAME: mysql-db
     networks:
       - internal-net01
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER -p$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
 
   pizza-top-app:
     container_name: pizza-top-app-container
@@ -32,8 +38,9 @@ services:
       - 3000:3000
     expose:
       - 3000
-    depends_on:
-      - mysql-db
+    depends_on: 
+      mysql-db:
+        condition: service_healthy
     environment:
       MYSQL_HOST: mysql-db
       MYSQL_NAME: pizzadb

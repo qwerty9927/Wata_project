@@ -13,5 +13,5 @@ jest.config.js
 
 src/tests
 
-git
+.git
 .gitignore

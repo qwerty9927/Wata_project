@@ -3,6 +3,7 @@ const { reportString, storeString, reportDetailString } = require("../constants/
 const { convertGetOneReportReturn, convertGetReportsReturn } = require("../dto/reports.dto");
 const { reportConstant } = require("../constants");
 const AppDataSource = require("../db/data-source");
+const config = require("../configs");
 
 const orderService = require("./order.service");
 const PDFReportService = require("./pdfReport.service");
@@ -77,9 +78,9 @@ class ReportService {
         await this.reportDetailRepo.save(reportDetails);
 
         // Generate PDF and get file name
-        const path = PDFReportService.generatePDF(savedReport, listProductInfo);
+        const { filePath, fileName } = PDFReportService.generatePDF(savedReport, listProductInfo);
 
-        return { report: savedReport, path };
+        return { report: savedReport, filePath, fileName };
     }
 }
 
