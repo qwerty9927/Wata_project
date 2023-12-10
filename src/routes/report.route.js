@@ -14,4 +14,6 @@ router.get('/:id', authentication, checkRole(["Admin"]), asyncHandler(reportCont
 
 router.post('/', authentication, checkRole(["Staff", "Admin"]), reportValidate.validator(), asyncHandler(reportControler.postCreateReport));
 
+router.get('/file/:fileName', authentication, checkRole(["Staff", "Admin"]), asyncHandler(reportControler.getReportPdfFile));
+
 module.exports = router

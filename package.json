@@ -6,14 +6,19 @@
   "scripts": {
     "test": "dotenv -e .env.test.local -- jest",
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "dev": "dotenv -e .env.dev.local -- nodemon server.js",
     "dev:db-test": "dotenv -e .env.test.local -- nodemon server.js",
     "build:db-test": "dotenv -e .env.test.local -- node seeder.js -i",
-    "build:db": "dotenv -e .env -- node seeder.js -i",
+    "build:db-dev": "dotenv -e .env.dev.local -- node seeder.js -i",
+    "build:db-prod": "dotenv -e .env -- node seeder.js -i",
     "clean:db-test": "dotenv -e .env.test.local -- node seeder.js -d",
-    "clean:db": "dotenv -e .env -- node seeder.js -d",
+    "clean:db-dev": "dotenv -e .env.dev.local -- node seeder.js -d",
+    "clean:db-prod": "dotenv -e .env -- node seeder.js -d",
     "restart:db-test": "npm run clean:db-test && npm run build:db-test",
-    "restart:db": "npm run clean:db && npm run build:db"
+    "restart:db-dev": "npm run clean:db-dev && npm run build:db-dev",
+    "restart:db-prod": "npm run clean:db-prod && npm run build:db-prod",
+    "app:create:docker": "docker compose up -d --build",
+    "app:remove:docker": "docker-compose down && docker rmi pizza-top-app:v1"
   },
   "author": "",
   "license": "ISC",

@@ -19,6 +19,11 @@ const productSizeEntity = new EntitySchema({
       target: productPriceString,
       inverseSide: 'productSize',
     },
+    productSize_orderDetail_relation: {
+      type: 'one-to-many',
+      target: productSizeString,
+      inverseSide: 'productSize',
+    },
   }
 })
 

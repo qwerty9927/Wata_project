@@ -35,17 +35,16 @@ const uploadFileToCloud = (field, main, fileSizeMb = 3, fileExtention = ['png', 
             const mimeType = fileTypes.test(file.mimetype);
 
             // console.log({ fileTypes, extName, mimeType });
+            // console.log({ reqBody: req.body, reqFile: file });
 
-            if (mimeType && extName) {
-                return cb(null, true);
-            } else {
-                const errUpload = new ErrorResponse("Error upload file: file types must be png/jpg/gif/jpeg", 422);
-                cb(errUpload);
+            if (!(mimeType && extName)) {
+                return cb(new multer.MulterError('FILE_NOT_ALLOWED'), false);
             }
+            return cb(null, true);
         }
     });
 
-    return Array.isArray(field) ? upload.fields(field) : upload.single(field);
+    return upload.single(field);
 };
 
 // Func remove file from Cloudinary

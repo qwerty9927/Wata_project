@@ -9,7 +9,7 @@ const reportDetailEntity = new EntitySchema({
             primary: true,
             generated: true
         },
-        quantity_buy: {
+        sale_quantity: {
             type: "tinyint"
         },
         report_id: {

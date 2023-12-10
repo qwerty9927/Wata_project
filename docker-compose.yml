@@ -1,0 +1,56 @@
+# docker-compose.yml
+
+version: "3.8"
+services:
+  mysql-db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql-container
+    restart: unless-stopped
+    ports: 
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./migrations/clean-db/migration.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./migrations/build-db/migration.sql:/docker-entrypoint-initdb.d/1_init.sql
+      - $HOME/database:/var/lib/mysql # C:\Users\lapTopName bind mount to /var/lib/mysql in docker 
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: pizzadb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: abc123456789
+      SERVICE_NAME: mysql-db
+    networks:
+      - internal-net01
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER -p$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+
+  pizza-top-app:
+    container_name: pizza-top-app-container
+    build: .
+    image: pizza-top-app:v1
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    depends_on: 
+      mysql-db:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: mysql-db
+      MYSQL_NAME: pizzadb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: 'abc123456789'
+      MYSQL_PORT: 3306
+      SERVICE_NAME: pizza-top-app-service
+    networks:
+      - internal-net01
+
+networks:
+  internal-net01:
+    driver: bridge

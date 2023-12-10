@@ -19,9 +19,10 @@ class PDFReportService {
         // Add report details to PDF
         doc.fontSize(12);
         doc.text(`Report ID: ${report.report_id}`);
-        doc.text(`Create Date: ${report.create_date}`);
-        doc.text(`Start Date: ${report.start_date}`);
-        doc.text(`End Date: ${report.end_date}`);
+        doc.text(`Create Date: ${(new Date(report.create_date)).toLocaleString()}`);
+        doc.text(`Start Date: ${(new Date(report.start_date)).toLocaleString()}`);
+        doc.text(`End Date: ${(new Date(report.end_date)).toLocaleString()}`);
+        doc.text(`-----------------------------------------------------`);
         doc.text(`Report Revenue: $${report.report_revenue.toFixed(2)}`);
         doc.text(`Report Total Order: ${report.report_total_order}`);
         doc.text(`Store ID: ${report.store_id}`);
@@ -34,18 +35,16 @@ class PDFReportService {
             doc.fontSize(12);
             doc.text(`Product ID: ${detail.product_id}`);
             doc.text(`Product Name: ${detail.product_name}`);
-            doc.text(`Product Size: ${detail.product_size}`);
-            doc.text(`Quantity Buy: ${detail.quantity_buy}`);
+            doc.text(`Size: ${detail.size}`);
+            doc.text(`Sale quantity: ${detail.quantity}`);
+            doc.text(`-----------------------------------------------------`);
             doc.moveDown(0.5);
         });
-
-        // Add a page footer with the current page number
-        doc.fontSize(10).text(`Page ${doc.page.number}`, 10, doc.page.height - 20, { align: 'right' });
 
         // Finalize PDF
         doc.end();
 
-        return filePath;
+        return { filePath, fileName };
     }
 }
 

@@ -9,15 +9,15 @@ const convertGetOneReportReturn = (report) => {
     })
 
     const reportDetails = report.report_reportDetail_relation.map((item) => {
-        const { reportDetail_product_relation, product_size, quantity_buy } = getInfoData({
-            fileds: ['reportDetail_product_relation.product_id', 'reportDetail_product_relation.product_name', 'product_size', 'quantity_buy'],
+        const { reportDetail_product_relation, product_size, sale_quantity } = getInfoData({
+            fileds: ['reportDetail_product_relation.product_id', 'reportDetail_product_relation.product_name', 'product_size', 'sale_quantity'],
             object: item
         })
         return {
             product_id: reportDetail_product_relation?.product_id || null,
             product_name: reportDetail_product_relation?.product_name || null,
             product_size,
-            quantity_buy
+            sale_quantity
         }
     })
 
