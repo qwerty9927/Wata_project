@@ -25,7 +25,7 @@ const modifyStoreInfomationValidate = checkSchema({
     isLength: {
       options: { min: 1, max: 20 },
     },
-    isAlphanumeric: true,
+    matches: { options: /^[a-zA-Z0-9\s]+$/ },
     errorMessage: "Invalid name! Name must be alpha characters.",
   },
 })
