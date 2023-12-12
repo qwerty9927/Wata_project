@@ -97,7 +97,7 @@ class AuthService {
     await (await this.getUserRepository()).update({ user_id }, { token: null })
   }
 
-  async requestChangePassword(user_email){
+  async requestChangePassword(url, user_email){
     // Find user by email
     const foundUser = await (await this.getUserRepository()).findOneBy({
       user_email
@@ -119,7 +119,7 @@ class AuthService {
     )
 
     // Send confirm to user
-    const comfirmLink = `http://${config.server.host}:${config.server.port}/api/v1/auth/comfirm-change-password?email=${user_email}&token=${token}`
+    const comfirmLink = `${url}/comfirm-change-password?email=${user_email}&token=${token}`
     const mailOptions = {
       from: config.emailName,
       to: user_email,
@@ -172,7 +172,7 @@ class AuthService {
     const hashPassword = await bcrypt.hash(password, 10)
     await (
       await this.getUserRepository()
-    ).update({ user_id: foundUser.user_id }, { user_password: hashPassword, verify_token: null })
+    ).update({ user_id: foundUser.user_id }, { user_password: hashPassword, verify_token: null, token: null })
   }
 }
 
