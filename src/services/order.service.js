@@ -38,7 +38,7 @@ class OrderService {
         };
     }
 
-    async createOrder({ orderCode, orderStatus, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
+    async createOrder({ orderCode, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
         // check existing Order
         const existingOrder = await this.orderRepo.findOne({ where: { order_code: orderCode } });
         if (existingOrder) {
@@ -66,7 +66,7 @@ class OrderService {
         // Create new order
         const newOrder = this.orderRepo.create({
             order_code: orderCode,
-            order_status: orderStatus,
+            order_status: 'pending',
             order_address: orderAddress,
             fee_transport: feeTransport,
             total_price_product: totalPriceProduct,
