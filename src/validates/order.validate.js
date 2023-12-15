@@ -27,7 +27,6 @@ module.exports = {
         return [
             check('storeId').isInt().withMessage('storeId'),
             check('orderCode').isString().withMessage(msgErr.orderCode),
-            check('orderStatus').isIn(options.status).withMessage(msgErr.orderStatus),
             check('orderAddress').isString().withMessage(msgErr.orderAddress),
             check('recipientName').isString().withMessage(msgErr.recipientName),
             check('recipientPhone').isMobilePhone().withMessage(msgErr.recipientPhone),

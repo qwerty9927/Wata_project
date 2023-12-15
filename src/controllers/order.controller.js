@@ -23,11 +23,11 @@ class OrderController {
             throw new UnprocessableContentResponse(errorMessages);
         }
 
-        const { orderCode, orderStatus, orderAddress, setAddressDefault, storeId,
+        const { orderCode, orderAddress, setAddressDefault, storeId,
             recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails } = req.body;
 
         const payload = {
-            orderCode, orderStatus, orderAddress, setAddressDefault, storeId,
+            orderCode, orderAddress, setAddressDefault, storeId,
             recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails,
             userId: req.user_id
         }
