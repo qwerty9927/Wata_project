@@ -22,8 +22,19 @@ class ProductService {
     limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
     const skip = (page - 1) * limit;
 
-    const products = await this.productRepo.find({ relations, where: { is_deleted: false, category }, skip, take: limit });
-    return convertProducts(products);
+    const promises = [
+      this.productRepo.findAndCount({ relations, where: { is_deleted: false, category }, skip, take: limit }),
+      this.productRepo.count()
+    ]
+    const [[products, count], totalRecord] = await Promise.all(promises);
+    return {
+      products: convertProducts(products),
+      count,
+      totalRecord,
+      page,
+      limit,
+      totalPage: Math.ceil(totalRecord / limit)
+    };
   }
 
   async findOneProduct(productId, relations = []) {
