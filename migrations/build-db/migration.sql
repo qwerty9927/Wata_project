@@ -8,6 +8,7 @@
 -- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- SET sql_require_primary_key = 0; 
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -82,7 +83,30 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_slug`, `product_im
 (4, 'Coca Cola', 'coca-cola', 'pizzaTop/products/coca_cmbw0t.jpg', 'Refreshing Soda', 'drink', 0),
 (5, 'Sting','sting','pizzaTop/products/Sting_smca5t.webp','Sting provip123','drink',0),
 (6, 'Cheese','cheese','pizzaTop/products/cheese_qdftox.jpg','Topping cheese provip','topping',0),
-(7, 'Chicken', 'chicken','pizzaTop/products/chicken_hsb1k7.jpg','Topping chicken dry','topping',0);
+(7, 'Chicken', 'chicken','pizzaTop/products/chicken_hsb1k7.jpg','Topping chicken dry','topping',0),
+(8, 'Pepperoni Pizza', 'pepperoni-pizza', NULL, 'Classic Pepperoni Pizza', 'food', 0),
+(9, 'Sprite', 'sprite', NULL, 'Refreshing Lemon-Lime Soda', 'drink', 0),
+(10, 'Olives', 'olives', NULL, 'Topping Olives', 'topping', 0),
+(11, 'Veggie Wrap', 'veggie-wrap', NULL, 'Healthy Vegetable Wrap', 'food', 0),
+(12, 'Iced Tea', 'iced-tea', NULL, 'Iced Tea with Lemon', 'drink', 0),
+(13, 'Tomatoes', 'tomatoes', NULL, 'Topping Tomatoes', 'topping', 0),
+(14, 'Margarita', 'margarita', NULL, 'Classic Margarita Drink', 'drink', 0),
+(15, 'Onions', 'onions', NULL, 'Topping Onions', 'topping', 0),
+(16, 'Chocolate Shake', 'chocolate-shake', NULL, 'Creamy Chocolate Shake', 'drink', 0),
+(17, 'Bell Peppers', 'bell-peppers', NULL, 'Topping Bell Peppers', 'topping', 0),
+(18, 'Mushroom Pizza', 'mushroom-pizza', NULL, 'Savory Mushroom Pizza', 'food', 0),
+(19, 'Lemonade', 'lemonade', NULL, 'Freshly Squeezed Lemonade', 'drink', 0),
+(20, 'Sausage', 'sausage', NULL, 'Topping Sausage', 'topping', 0),
+(21, 'BBQ Tofu Pizza', 'bbq-tofu-pizza', NULL, 'Barbecue Tofu Pizza', 'food', 0),
+(22, 'Ginger Ale', 'ginger-ale', NULL, 'Spicy Ginger Ale', 'drink', 0),
+(23, 'Jalapeños', 'jalapenos', NULL, 'Spicy Topping Jalapeños', 'topping', 0),
+(24, 'Chicken Alfredo Pizza', 'chicken-alfredo-pizza', NULL, 'Creamy Chicken Alfredo Pizza', 'food', 0),
+(25, 'Lime Soda', 'lime-soda', NULL, 'Zesty Lime Soda', 'drink', 0),
+(26, 'Feta Cheese', 'feta-cheese', NULL, 'Topping Feta Cheese', 'topping', 0),
+(27, 'Mint Mojito', 'mint-mojito', NULL, 'Refreshing Mint Mojito', 'drink', 0),
+(28, 'Spinach', 'spinach', NULL, 'Healthy Topping Spinach', 'topping', 0),
+(29, 'Banana Smoothie', 'banana-smoothie', NULL, 'Creamy Banana Smoothie', 'drink', 0),
+(30, 'Artichokes', 'artichokes', NULL, 'Topping Artichokes', 'topping', 0);
 -- --------------------------------------------------------
 
 --
@@ -134,7 +158,72 @@ INSERT INTO `product_price` (`product_price_id`,`product_id`,`product_size_id`,`
 (12,5,1,15000.00),
 (13,5,2,25000.00),
 (14,6,1,35000.00),
-(15,7,1,70000.00);
+(15,7,1,70000.00),
+(16, 8, 1, -- Giá tiền cho Pepperoni Pizza - Small
+150000.00),
+(17, 8, 2, -- Giá tiền cho Pepperoni Pizza - Medium
+200000.00),
+(18, 8, 3, -- Giá tiền cho Pepperoni Pizza - Large
+250000.00),
+(19, 9, 1, -- Giá tiền cho Sprite - Small
+199000.00),
+(20, 9, 2, -- Giá tiền cho Sprite - Medium
+220000.00),
+(21, 9, 3, -- Giá tiền cho Sprite - Large
+300000.00),
+(22, 10, 1, -- Giá tiền cho Olives Topping - Small
+99000.00),
+(23, 10, 2, -- Giá tiền cho Olives Topping - Medium
+120000.00),
+(24, 10, 3, -- Giá tiền cho Olives Topping - Large
+170000.00),
+(25, 11, 1, -- Giá tiền cho Veggie Wrap - Small
+15000.00),
+(26, 11, 2, -- Giá tiền cho Veggie Wrap - Medium
+25000.00),
+(27, 12, 1, -- Giá tiền cho Iced Tea - Small
+15000.00),
+(28, 12, 2, -- Giá tiền cho Iced Tea - Medium
+25000.00),
+(29, 13, 1, -- Giá tiền cho Tomatoes Topping - Small
+35000.00),
+(30, 14, 1, -- Giá tiền cho Margarita Drink - Small
+70000.00),
+(31, 15, 1, -- Giá tiền cho Onions Topping - Small
+15000.00),
+(32, 16, 1, -- Giá tiền cho Chocolate Shake - Small
+15000.00),
+(33, 17, 1, -- Giá tiền cho Bell Peppers Topping - Small
+25000.00),
+(34, 18, 1, -- Giá tiền cho Mushroom Pizza - Small
+15000.00),
+(35, 18, 2, -- Giá tiền cho Mushroom Pizza - Medium
+25000.00),
+(36, 19, 1, -- Giá tiền cho Lemonade - Small
+35000.00),
+(37, 19, 2, -- Giá tiền cho Lemonade - Medium
+70000.00),
+(38, 20, 1, -- Giá tiền cho Sausage Topping - Small
+99000.00),
+(39, 21, 1, -- Giá tiền cho BBQ Tofu Pizza - Small
+120000.00),
+(40, 22, 1, -- Giá tiền cho Ginger Ale - Small
+170000.00),
+(41, 23, 1, -- Giá tiền cho Jalapeños Topping - Small
+15000.00),
+(42, 24, 1, -- Giá tiền cho Chicken Alfredo Pizza - Small
+25000.00),
+(43, 25, 1, -- Giá tiền cho Lime Soda - Small
+15000.00),
+(44, 26, 1, -- Giá tiền cho Feta Cheese Topping - Small
+25000.00),
+(45, 27, 1, -- Giá tiền cho Mint Mojito - Small
+35000.00),
+(46, 28, 1, -- Giá tiền cho Spinach Topping - Small
+70000.00),
+(47, 29, 1, -- Giá tiền cho Banana Smoothie - Small
+15000.00),
+(48, 30, 1, 25000.00);
 -- --------------------------------------------------------
 
 
