@@ -55,7 +55,8 @@ class AuthController {
     if (resultValidate.length !== 0) {
       throw new UnprocessableContentResponse(getErrorMessage(resultValidate))
     }
-    await AuthService.requestChangePassword(req.body.user_email)
+    const baseUrl = req.protocol + '://' + req.get('host') + req.baseUrl;
+    await AuthService.requestChangePassword(baseUrl, req.body.user_email)
     new SuccessResponse({
       message: "Send mail success"
     }).send({ res })
