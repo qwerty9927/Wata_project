@@ -22,8 +22,15 @@ class ProductService {
     limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
     const skip = (page - 1) * limit;
 
-    const products = await this.productRepo.find({ relations, where: { is_deleted: false, category }, skip, take: limit });
-    return convertProducts(products);
+    const [entities, totalRecord] = await this.productRepo.findAndCount({ relations, where: { is_deleted: false, category }, skip, take: limit });
+    return {
+      products: convertProducts(entities),
+      count: entities.length,
+      totalRecord,
+      page,
+      limit,
+      totalPage: Math.ceil(totalRecord / limit)
+    };
   }
 
   async findOneProduct(productId, relations = []) {

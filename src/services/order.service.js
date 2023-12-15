@@ -27,8 +27,15 @@ class OrderService {
         limit = Math.min(maxLimit, Math.max(0, parseInt(limit)) || maxLimit);
         const skip = (page - 1) * limit;
 
-        const orders = await this.orderRepo.find({ relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize], where: { store_id: storeId }, skip, take: limit });
-        return convertGetOrdersReturn(orders);
+        const [entities, totalRecord] = await this.orderRepo.findAndCount({ relations: [relationOrderOderDetail, relationOrderDetailProduct, relationOrderDetailProductSize], where: { store_id: storeId }, skip, take: limit });
+        return {
+            orders: convertGetOrdersReturn(entities),
+            count: entities.lenth,
+            totalRecord,
+            page,
+            limit,
+            totalPage: Math.ceil(totalRecord / limit)
+        };
     }
 
     async createOrder({ orderCode, orderStatus, orderAddress, setAddressDefault, storeId, recipientName, recipientPhone, setPhoneDefault, feeTransport, orderDetails, userId }) {
