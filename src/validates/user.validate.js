@@ -11,7 +11,7 @@ const changeRoleValidate = checkSchema({
     notEmpty: true,
     isNumeric: true,
     errorMessage: "User id must be number!",
-  }
+  },
 })
 
 const changePasswordValidate = checkSchema({
@@ -24,18 +24,21 @@ const changePasswordValidate = checkSchema({
       options: { min: 8, max: 20 },
     },
     errorMessage: "Password out of range 8 -> 20 character",
-  }
+  },
 })
 
 const modifyProfileValidate = checkSchema({
   full_name: {
     exists: {
       if: (value, { req }) => {
-        if(isObjectEmpty(req.body)){
+        if (isObjectEmpty(req.body)) {
+          return true
+        }
+        if (req.body.full_name === "") {
           return true
         }
         return !!req.body.full_name
-      }
+      },
     },
     isLength: {
       options: { min: 1, max: 20 },
@@ -46,11 +49,14 @@ const modifyProfileValidate = checkSchema({
   user_phone: {
     exists: {
       if: (value, { req }) => {
-        if(isObjectEmpty(req.body)){
+        if (isObjectEmpty(req.body)) {
+          return true
+        }
+        if (req.body.user_phone === "") {
           return true
         }
         return !!req.body.user_phone
-      }
+      },
     },
     isMobilePhone: {
       options: ["vi-VN"],
@@ -60,11 +66,14 @@ const modifyProfileValidate = checkSchema({
   user_email: {
     exists: {
       if: (value, { req }) => {
-        if(isObjectEmpty(req.body)){
+        if (isObjectEmpty(req.body)) {
+          return true
+        }
+        if (req.body.user_email === "") {
           return true
         }
         return !!req.body.user_email
-      }
+      },
     },
     isEmail: true,
     errorMessage: "Invalid email!",
@@ -74,5 +83,5 @@ const modifyProfileValidate = checkSchema({
 module.exports = {
   changeRoleValidate,
   changePasswordValidate,
-  modifyProfileValidate
+  modifyProfileValidate,
 }

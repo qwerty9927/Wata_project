@@ -19,6 +19,9 @@ const modifyStoreInfomationValidate = checkSchema({
         if (isObjectEmpty(req.body)) {
           return true
         }
+        if (req.body.store_name === "") {
+          return true
+        }
         return !!req.body.store_name
       },
     },
